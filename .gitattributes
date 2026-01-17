@@ -1,0 +1,3 @@
+*.mp4 !text !filter !merge !diff
+*.webm !text !filter !merge !diff
+*.mov !text !filter !merge !diff
