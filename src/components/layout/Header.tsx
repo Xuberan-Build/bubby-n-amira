@@ -2,8 +2,8 @@ import Link from "next/link";
 
 const navItems = [
   { href: "/bubby", label: "Meet Bubby" },
-  { href: "/amira", label: "Meet Amira" },
-  { href: "/available", label: "What's Available" },
+  { href: "/amira", label: "Meet Us" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export default function Header() {
@@ -24,9 +24,7 @@ export default function Header() {
         </nav>
         <Link
           href="/cart"
-          className={`relative flex h-10 w-10 items-center justify-center rounded-full border border-transparent text-[var(--color-charcoal)] transition ${
-            cartCount ? "opacity-100" : "pointer-events-none opacity-0"
-          }`}
+          className="relative flex h-10 w-10 items-center justify-center rounded-full border border-transparent text-[var(--color-charcoal)] transition"
           aria-label="Cart"
         >
           <svg
@@ -40,13 +38,15 @@ export default function Header() {
             strokeLinejoin="round"
             aria-hidden
           >
-            <circle cx="9" cy="21" r="1" />
-            <circle cx="20" cy="21" r="1" />
-            <path d="M1 1h4l2.4 12.4a2 2 0 0 0 2 1.6h9.6a2 2 0 0 0 2-1.6L23 6H6" />
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 0 1-8 0" />
           </svg>
-          <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-coral)] text-xs text-white">
-            {cartCount}
-          </span>
+          {cartCount > 0 && (
+            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-coral)] text-xs text-white">
+              {cartCount}
+            </span>
+          )}
         </Link>
       </div>
       <div className="page-shell border-t border-[var(--color-gray-100)] py-3 text-xs text-[var(--color-gray-500)] md:hidden">

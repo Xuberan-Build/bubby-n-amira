@@ -3,25 +3,25 @@ import Blob from "@/components/ui/Blob";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 
-export default function Home() {
-  const offerings = [
-    {
-      name: "Bubby's Practical Tee",
-      detail: "Cotton. Neutral. Just enough.",
-      href: "/product/bubbys-practical-tee",
-    },
-    {
-      name: "Amira's Tote (The One That Replaced The Other One)",
-      detail: "Canvas with a memory for receipts.",
-      href: "/product/amiras-tote",
-    },
-    {
-      name: "The Quiet Mug",
-      detail: "Holds coffee. Keeps secrets.",
-      href: "/product/quiet-mug",
-    },
-  ];
+const favorites = [
+  {
+    name: "Bubby's Practical Tee",
+    detail: "A shirt. 100% cotton. Fits like a shirt should.",
+    href: "/product/bubbys-practical-tee",
+  },
+  {
+    name: "Amira's Tote",
+    detail: "Canvas. Fits groceries or whatever else you carry around.",
+    href: "/product/amiras-tote",
+  },
+  {
+    name: "The Quiet Mug",
+    detail: "Ceramic. Holds coffee. That's the whole pitch.",
+    href: "/product/quiet-mug",
+  },
+];
 
+export default function Home() {
   return (
     <div className="relative overflow-hidden">
       <Blob
@@ -38,86 +38,37 @@ export default function Home() {
             "radial-gradient(circle at 70% 30%, #e5d9f2, #d5f4e6 60%, #fefefe 100%)",
         }}
       />
+
+      {/* Hero */}
       <section className="page-shell section-pad-lg relative">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="fade-up space-y-6" style={{ animationDelay: "50ms" }}>
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gray-500)]">
-              Bubby n Amira
-            </p>
-            <h1 className="font-display text-4xl leading-tight text-[var(--color-charcoal)] md:text-6xl">
-              Meet Bubby and Amira. They have stuff.
-            </h1>
-            <p className="max-w-lg text-base leading-relaxed text-[var(--color-gray-500)] md:text-lg">
-              Two characters. Occasional products. Mostly just existing in their
-              own little world. You can hang out and, if you want, take
-              something home.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Button href="/bubby">Meet the characters</Button>
-              <Button href="/available" variant="secondary">
-                What&apos;s around
-              </Button>
-            </div>
-          </div>
-          <div className="fade-up" style={{ animationDelay: "150ms" }}>
-            <div className="grid gap-6">
-              <div className="soft-card bg-[var(--color-peach)]/70 p-7 tilt-left">
-                <p className="font-display text-lg">Bubby says it&apos;s fine.</p>
-                <p className="mt-3 text-sm text-[var(--color-gray-500)]">
-                  Observant, dry, and somehow always holding a list.
-                </p>
-              </div>
-              <div className="soft-card bg-[var(--color-mint)]/80 p-7 tilt-right">
-                <p className="font-display text-lg">Amira is collecting things.</p>
-                <p className="mt-3 text-sm text-[var(--color-gray-500)]">
-                  Calm energy, quick wit, likes what she likes.
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="fade-up space-y-4" style={{ animationDelay: "50ms" }}>
+          <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gray-500)]">
+            Bubby n Amira
+          </p>
+          <h1 className="font-display text-4xl leading-tight text-[var(--color-charcoal)] md:text-6xl">
+            A cat. His person. Some stuff they like.
+          </h1>
         </div>
       </section>
 
-      <section className="page-shell section-pad">
-        <div className="grid gap-10 md:grid-cols-2">
-          <Card className="fade-up bg-[var(--color-pink)]/60 perspective-slab">
-            <h2 className="font-display text-2xl">Bubby</h2>
-            <p className="mt-3 text-sm text-[var(--color-gray-500)]">
-              Keeps a running commentary about everything, but it never sounds
-              like commentary. Likes clean lines, warm drinks, and finding the
-              exact right phrase.
-            </p>
-            <Link href="/bubby" className="mt-5 inline-flex text-sm link-underline">
-              See Bubby&apos;s page
-            </Link>
-          </Card>
-          <Card className="fade-up bg-[var(--color-lavender)]/70 perspective-slab-right">
-            <h2 className="font-display text-2xl">Amira</h2>
-            <p className="mt-3 text-sm text-[var(--color-gray-500)]">
-              Moves quietly but leaves a trail of opinions. Collects objects
-              with stories and deletes the ones without.
-            </p>
-            <Link href="/amira" className="mt-5 inline-flex text-sm link-underline">
-              See Amira&apos;s page
-            </Link>
-          </Card>
-        </div>
-      </section>
-
+      {/* Bubby's Faves */}
       <section className="page-shell section-pad">
         <div className="flex items-end justify-between gap-6">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gray-500)]">
-              What&apos;s around lately
+            <h2 className="font-display text-3xl">Bubby&apos;s Faves</h2>
+            <p className="mt-2 text-sm text-[var(--color-gray-500)]">
+              He picked these. We&apos;re not sure how.
             </p>
-            <h2 className="font-display text-3xl">Current offerings</h2>
           </div>
-          <Link href="/available" className="hidden text-sm link-underline md:inline-flex">
-            All offerings
+          <Link
+            href="/available"
+            className="hidden text-sm link-underline md:inline-flex"
+          >
+            See everything
           </Link>
         </div>
         <div className="mt-10 grid gap-7 md:grid-cols-3">
-          {offerings.map((item, index) => (
+          {favorites.map((item, index) => (
             <Card
               key={item.name}
               className="fade-up bg-[var(--color-gray-100)]"
@@ -127,7 +78,99 @@ export default function Home() {
               <p className="mt-3 text-sm text-[var(--color-gray-500)]">
                 {item.detail}
               </p>
-              <Link href={item.href} className="mt-5 inline-flex text-sm link-underline">
+              <Link
+                href={item.href}
+                className="mt-5 inline-flex text-sm link-underline"
+              >
+                Details
+              </Link>
+            </Card>
+          ))}
+        </div>
+        <div className="mt-6 md:hidden">
+          <Link href="/available" className="text-sm link-underline">
+            See everything
+          </Link>
+        </div>
+      </section>
+
+      {/* Amira — Bubby's Obsession */}
+      <section className="page-shell section-pad">
+        <div className="soft-card bg-[var(--color-lavender)]/70 p-10 md:p-14 perspective-slab-right">
+          <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr] md:items-center">
+            <div>
+              <h2 className="font-display text-3xl">Amira</h2>
+              <p className="mt-1 text-sm text-[var(--color-gray-500)]">
+                Bubby&apos;s obsession. She didn&apos;t ask for this.
+              </p>
+              <p className="mt-5 text-base leading-relaxed text-[var(--color-gray-500)]">
+                Wherever Amira goes, Bubby follows. Whatever Amira does, Bubby
+                judges. This is their dynamic. It works, somehow.
+              </p>
+            </div>
+            <div>
+              <Link href="/amira" className="text-sm link-underline">
+                Meet Us
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* The Story */}
+      <section className="page-shell section-pad">
+        <div className="grid gap-10 md:grid-cols-2">
+          <div>
+            <h2 className="font-display text-3xl">The Story</h2>
+            <p className="mt-4 text-base leading-relaxed text-[var(--color-gray-500)]">
+              Bubby is a cat. Amira is the person he won&apos;t leave alone. At
+              some point we started putting things on the internet. Here we are.
+            </p>
+          </div>
+          <div>
+            <p className="font-display text-lg">How to shop our favorites</p>
+            <p className="mt-3 text-sm leading-relaxed text-[var(--color-gray-500)]">
+              Find something Bubby likes. Decide if you also like it. Get it if
+              you want. That&apos;s really it.
+            </p>
+            <div className="mt-6">
+              <Button href="/available">See What He Likes</Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Shop Our Favorites */}
+      <section className="page-shell section-pad">
+        <div className="flex items-end justify-between gap-6">
+          <div>
+            <h2 className="font-display text-3xl">Shop Our Favorites</h2>
+            <p className="mt-2 text-sm text-[var(--color-gray-500)]">
+              Bubby approves of all of these. For whatever that&apos;s worth.
+            </p>
+          </div>
+          <Link
+            href="/available"
+            className="hidden text-sm link-underline md:inline-flex"
+          >
+            See everything
+          </Link>
+        </div>
+        <div className="mt-10 grid gap-7 md:grid-cols-3">
+          {favorites.map((item, index) => (
+            <Card
+              key={`shop-${item.name}`}
+              className="fade-up bg-[var(--color-gray-100)]"
+              style={{ animationDelay: `${(index + 1) * 100}ms` }}
+            >
+              <p className="font-display text-lg">{item.name}</p>
+              <p className="mt-3 text-sm text-[var(--color-gray-500)]">
+                {item.detail}
+              </p>
+              <Link
+                href={item.href}
+                className="mt-5 inline-flex text-sm link-underline"
+              >
                 Details
               </Link>
             </Card>
@@ -135,24 +178,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Keep Up With Us */}
       <section className="page-shell section-pad">
         <div className="soft-card bg-[var(--color-yellow)]/70 p-10 md:p-14 perspective-slab">
           <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr] md:items-center">
             <div>
-              <h3 className="font-display text-2xl">Quiet updates</h3>
+              <h3 className="font-display text-2xl">Keep Up With Us</h3>
               <p className="mt-3 text-sm text-[var(--color-gray-500)]">
-                Sometimes there&apos;s a new thing. Sometimes there&apos;s a new
-                story. If you want to hear about it, we&apos;ll keep it short.
+                We&apos;ll email you when something happens. Probably not that
+                often.
               </p>
             </div>
-            <div className="flex flex-wrap gap-4">
-              <Button variant="secondary" href="/available">
-                See what&apos;s new
-              </Button>
-              <Button variant="ghost" href="/contact">
-                Say hi
-              </Button>
-            </div>
+            <form className="flex flex-wrap gap-3">
+              <input
+                type="email"
+                placeholder="your email"
+                className="flex-1 rounded-2xl border border-transparent bg-white/80 px-4 py-2.5 text-sm text-[var(--color-charcoal)] placeholder:text-[var(--color-gray-500)] focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="rounded-2xl bg-[var(--color-charcoal)] px-6 py-2.5 text-sm text-white transition hover:opacity-80"
+              >
+                Okay
+              </button>
+            </form>
           </div>
         </div>
       </section>
