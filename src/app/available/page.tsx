@@ -3,45 +3,42 @@ import Card from "@/components/ui/Card";
 
 const offerings = [
   {
-    name: "Bubby's Practical Tee",
-    detail: "Cotton. Neutral. The kind of thing that works.",
-    character: "Bubby",
+    name: "The Shirt We Made",
+    detail: "A shirt. 100% cotton. Fits like a shirt should.",
     href: "/product/bubbys-practical-tee",
   },
   {
-    name: "Amira's Tote",
-    detail: "Canvas, 15 x 16, holds groceries and opinions.",
-    character: "Amira",
+    name: "That Tote",
+    detail: "Canvas. Fits groceries or whatever else you carry around. Bubby's face is on it.",
     href: "/product/amiras-tote",
   },
   {
     name: "The Quiet Mug",
-    detail: "A mug that knows when to stop talking.",
-    character: "Both",
+    detail: "Ceramic. Holds coffee. That's the whole pitch.",
     href: "/product/quiet-mug",
+  },
+  {
+    name: "The Notebook",
+    detail: "Lined pages. Soft cover. 120 pages.",
+    href: "/product/notebook-of-mild-opinions",
+  },
+  {
+    name: "The Sticker Sheet",
+    detail: "Matte finish. Weather resistant. Peels cleanly.",
+    href: "/product/lavender-sticker-sheet",
   },
 ];
 
 export default function AvailablePage() {
   return (
     <div className="page-shell section-pad-lg">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gray-500)]">
-            What&apos;s available
-          </p>
-          <h1 className="font-display text-4xl md:text-5xl">
-            Current offerings
-          </h1>
-        </div>
-        <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.2em] text-[var(--color-gray-500)]">
-          <span className="rounded-full border border-[var(--color-gray-500)] px-4 py-2">
-            Bubby
-          </span>
-          <span className="rounded-full border border-[var(--color-gray-500)] px-4 py-2">
-            Amira
-          </span>
-        </div>
+      <div>
+        <h1 className="font-display text-4xl md:text-5xl">
+          Shop Our Favorites
+        </h1>
+        <p className="mt-3 text-sm text-[var(--color-gray-500)]">
+          Bubby approves of all of these. For whatever that&apos;s worth.
+        </p>
       </div>
 
       <div className="mt-12 grid gap-10">
@@ -52,15 +49,12 @@ export default function AvailablePage() {
           >
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-gray-500)]">
-                  {item.character}
-                </p>
                 <p className="font-display text-2xl">{item.name}</p>
                 <p className="mt-3 text-sm text-[var(--color-gray-500)]">
                   {item.detail}
                 </p>
               </div>
-              <Link href={item.href} className="link-underline text-sm">
+              <Link href={item.href} className="link-underline text-sm shrink-0">
                 See details
               </Link>
             </div>
