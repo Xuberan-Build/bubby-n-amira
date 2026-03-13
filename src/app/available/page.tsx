@@ -3,29 +3,28 @@ import Card from "@/components/ui/Card";
 
 const offerings = [
   {
-    name: "The Shirt We Made",
-    detail: "A shirt. 100% cotton. Fits like a shirt should.",
-    href: "/product/bubbys-practical-tee",
+    name: "The Wall Brush",
+    detail: "Bubby's actual wall brush. The one that started this.",
+    href: "/product/wall-brush",
+    status: "available",
   },
   {
-    name: "That Tote",
-    detail: "Canvas. Fits groceries or whatever else you carry around. Bubby's face is on it.",
-    href: "/product/amiras-tote",
-  },
-  {
-    name: "The Quiet Mug",
-    detail: "Ceramic. Holds coffee. That's the whole pitch.",
-    href: "/product/quiet-mug",
-  },
-  {
-    name: "The Notebook",
-    detail: "Lined pages. Soft cover. 120 pages.",
-    href: "/product/notebook-of-mild-opinions",
+    name: "The Bubby Blanket",
+    detail: "Soft. He approves. That's the whole review.",
+    href: "/product/bubby-blanket",
+    status: "available",
   },
   {
     name: "The Sticker Sheet",
-    detail: "Matte finish. Weather resistant. Peels cleanly.",
-    href: "/product/lavender-sticker-sheet",
+    detail: "Artist being sourced. Worth the wait.",
+    href: "/product/sticker-sheet",
+    status: "coming-soon",
+  },
+  {
+    name: "The Bubby Tee",
+    detail: "100% cotton. Made for you when you order. Bubby on it.",
+    href: "/product/bubby-tee",
+    status: "available",
   },
 ];
 
@@ -49,7 +48,14 @@ export default function AvailablePage() {
           >
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="font-display text-2xl">{item.name}</p>
+                <div className="flex items-center gap-3">
+                  <p className="font-display text-2xl">{item.name}</p>
+                  {item.status === "coming-soon" && (
+                    <span className="rounded-full bg-[var(--color-peach)]/60 px-3 py-1 text-xs text-[var(--color-gray-500)]">
+                      Coming soon
+                    </span>
+                  )}
+                </div>
                 <p className="mt-3 text-sm text-[var(--color-gray-500)]">
                   {item.detail}
                 </p>
