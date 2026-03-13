@@ -5,19 +5,19 @@ import Card from "@/components/ui/Card";
 
 const favorites = [
   {
-    name: "Bubby's Practical Tee",
-    detail: "A shirt. 100% cotton. Fits like a shirt should.",
-    href: "/product/bubbys-practical-tee",
+    name: "The Wall Brush",
+    detail: "Bubby's actual wall brush. The one that started this.",
+    href: "/product/wall-brush",
   },
   {
-    name: "Amira's Tote",
-    detail: "Canvas. Fits groceries or whatever else you carry around.",
-    href: "/product/amiras-tote",
+    name: "The Bubby Blanket",
+    detail: "Soft. He approves. That's the whole review.",
+    href: "/product/bubby-blanket",
   },
   {
-    name: "The Quiet Mug",
-    detail: "Ceramic. Holds coffee. That's the whole pitch.",
-    href: "/product/quiet-mug",
+    name: "The Bubby Tee",
+    detail: "100% cotton. Made for you when you order. Bubby on it.",
+    href: "/product/bubby-tee",
   },
 ];
 
@@ -137,44 +137,6 @@ export default function Home() {
               <Button href="/available">See What He Likes</Button>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Shop Our Favorites */}
-      <section className="page-shell section-pad">
-        <div className="flex items-end justify-between gap-6">
-          <div>
-            <h2 className="font-display text-3xl">Shop Our Favorites</h2>
-            <p className="mt-2 text-sm text-[var(--color-gray-500)]">
-              Bubby approves of all of these. For whatever that&apos;s worth.
-            </p>
-          </div>
-          <Link
-            href="/available"
-            className="hidden text-sm link-underline md:inline-flex"
-          >
-            See everything
-          </Link>
-        </div>
-        <div className="mt-10 grid gap-7 md:grid-cols-3">
-          {favorites.map((item, index) => (
-            <Card
-              key={`shop-${item.name}`}
-              className="fade-up bg-[var(--color-gray-100)]"
-              style={{ animationDelay: `${(index + 1) * 100}ms` }}
-            >
-              <p className="font-display text-lg">{item.name}</p>
-              <p className="mt-3 text-sm text-[var(--color-gray-500)]">
-                {item.detail}
-              </p>
-              <Link
-                href={item.href}
-                className="mt-5 inline-flex text-sm link-underline"
-              >
-                Details
-              </Link>
-            </Card>
-          ))}
         </div>
       </section>
 
