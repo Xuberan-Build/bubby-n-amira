@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Blob from "@/components/ui/Blob";
 import Button from "@/components/ui/Button";
@@ -19,13 +20,7 @@ const faves = [
 export default function BubbyPage() {
   return (
     <div className="relative overflow-hidden">
-      <Blob
-        className="blob-slow left-[-60px] top-24 h-64 w-64"
-        style={{
-          background:
-            "radial-gradient(circle at 30% 30%, #ffe5ec, #ffdab9 65%, #fefefe 100%)",
-        }}
-      />
+      <Blob className="blob-slow left-[-60px] top-24 h-64 w-64" fill="#ffdab9" />
 
       <section className="page-shell section-pad-lg relative">
         <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
@@ -49,23 +44,31 @@ export default function BubbyPage() {
               </Button>
             </div>
           </div>
-          <div className="fade-up" style={{ animationDelay: "120ms" }}>
-            <Card className="bg-[var(--color-peach)]/70 perspective-slab">
-              <p className="font-display text-lg">Things Bubby likes</p>
-              <ul className="mt-4 space-y-2 text-sm text-[var(--color-gray-500)]">
-                <li>Amira, obviously</li>
-                <li>His blanket</li>
-                <li>Being in the way</li>
-                <li>Staring at walls for no reason</li>
-              </ul>
-              <p className="mt-6 font-display text-lg">Things Bubby tolerates</p>
-              <ul className="mt-4 space-y-2 text-sm text-[var(--color-gray-500)]">
-                <li>Everyone who is not Amira</li>
-                <li>Closed doors</li>
-                <li>Being photographed</li>
-              </ul>
-            </Card>
+          <div className="fade-up relative aspect-square overflow-hidden rounded-3xl" style={{ animationDelay: "120ms" }}>
+            <Image
+              src="/images/meet-bubby/meetbubby_section1.webp"
+              alt="Bubby the cat"
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 1024px) 100vw, 45vw"
+            />
           </div>
+        </div>
+      </section>
+
+      <section className="page-shell section-pad">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {[
+            { src: "/images/meet-bubby/meetbubby_section1_1.webp", alt: "Bubby" },
+            { src: "/images/meet-bubby/meetbubby_section1_2.webp", alt: "Bubby" },
+            { src: "/images/meet-bubby/meetbubby_section1_3.webp", alt: "Bubby" },
+            { src: "/images/meet-bubby/meetbubby_section1_4.webp", alt: "Bubby" },
+          ].map((img) => (
+            <div key={img.src} className="relative aspect-square overflow-hidden rounded-2xl">
+              <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
+            </div>
+          ))}
         </div>
       </section>
 

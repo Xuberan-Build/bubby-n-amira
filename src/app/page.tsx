@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import Blob from "@/components/ui/Blob";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import WaitlistButton from "@/components/waitlist/WaitlistButton";
 
 const favorites = [
   {
@@ -25,33 +27,41 @@ export default function Home() {
   return (
     <div className="relative overflow-hidden">
       <Blob
-        className="blob-slow -left-24 top-20 h-72 w-72"
-        style={{
-          background:
-            "radial-gradient(circle at 30% 30%, #ffe5ec, #ffd6e2 60%, #fefefe 100%)",
-        }}
+        className="blob-slow -left-24 top-20 h-[360px] w-[360px]"
+        fill="#FF9AA2"
       />
       <Blob
         className="blob-fast right-[-80px] top-[-40px] h-80 w-80"
-        style={{
-          background:
-            "radial-gradient(circle at 70% 30%, #e5d9f2, #d5f4e6 60%, #fefefe 100%)",
-        }}
+        fill="#e5d9f2"
       />
 
       {/* Hero */}
       <section className="page-shell section-pad-lg relative">
-        <div className="fade-up space-y-4" style={{ animationDelay: "50ms" }}>
-          <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gray-500)]">
-            Bubby n Amira
-          </p>
-          <h1 className="font-display text-4xl leading-tight text-[var(--color-charcoal)] md:text-6xl">
-            A cat. His person. Some stuff they like.
-          </h1>
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div className="fade-up space-y-4" style={{ animationDelay: "50ms" }}>
+            <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gray-500)]">
+              Bubby n Amira
+            </p>
+            <h1 className="font-display text-4xl leading-tight text-[var(--color-charcoal)] md:text-6xl">
+              A cat. His person. Some stuff they like.
+            </h1>
+          </div>
+          <div className="fade-up relative aspect-[4/3] overflow-hidden rounded-3xl" style={{ animationDelay: "150ms" }}>
+            <Image
+              src="/images/home/home_section1.webp"
+              alt="Bubby and Amira"
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+          </div>
         </div>
       </section>
 
       {/* Bubby's Faves */}
+      <div className="relative overflow-hidden">
+      <Blob className="blob-slow right-[-50px] top-[-30px] h-48 w-48" fill="#d5f4e6" />
       <section className="page-shell section-pad">
         <div className="flex items-end justify-between gap-6">
           <div>
@@ -93,6 +103,7 @@ export default function Home() {
           </Link>
         </div>
       </section>
+      </div>
 
       {/* Amira — Bubby's Obsession */}
       <section className="page-shell section-pad">
@@ -118,6 +129,8 @@ export default function Home() {
       </section>
 
       {/* The Story */}
+      <div className="relative overflow-hidden">
+      <Blob className="blob-slow -left-20 top-[-20px] h-56 w-56" fill="#ffdab9" />
       <section className="page-shell section-pad">
         <div className="grid gap-10 md:grid-cols-2">
           <div>
@@ -139,6 +152,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </div>
 
       {/* Keep Up With Us */}
       <section className="page-shell section-pad">
@@ -147,23 +161,17 @@ export default function Home() {
             <div>
               <h3 className="font-display text-2xl">Keep Up With Us</h3>
               <p className="mt-3 text-sm text-[var(--color-gray-500)]">
-                We&apos;ll email you when something happens. Probably not that
-                often.
+                bubby will notify you when he feels like it.
               </p>
             </div>
-            <form className="flex flex-wrap gap-3">
-              <input
-                type="email"
-                placeholder="your email"
-                className="flex-1 rounded-2xl border border-transparent bg-white/80 px-4 py-2.5 text-sm text-[var(--color-charcoal)] placeholder:text-[var(--color-gray-500)] focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="rounded-2xl bg-[var(--color-charcoal)] px-6 py-2.5 text-sm text-white transition hover:opacity-80"
-              >
-                Okay
-              </button>
-            </form>
+            <div className="flex flex-col items-start gap-3">
+              <p className="text-sm text-[var(--color-gray-500)]">
+                join bubby&apos;s waitlist for a massage .. or something
+              </p>
+              <WaitlistButton source="homepage-cta">
+                sure i like you, add me
+              </WaitlistButton>
+            </div>
           </div>
         </div>
       </section>

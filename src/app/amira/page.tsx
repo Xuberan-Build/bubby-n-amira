@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Blob from "@/components/ui/Blob";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -5,13 +6,7 @@ import Card from "@/components/ui/Card";
 export default function MeetUsPage() {
   return (
     <div className="relative overflow-hidden">
-      <Blob
-        className="blob-slow right-[-60px] top-20 h-72 w-72"
-        style={{
-          background:
-            "radial-gradient(circle at 60% 30%, #e5d9f2, #d5f4e6 60%, #fefefe 100%)",
-        }}
-      />
+      <Blob className="blob-slow right-[-60px] top-20 h-72 w-72" fill="#e5d9f2" />
 
       <section className="page-shell section-pad-lg relative">
         <div className="fade-up space-y-6">
@@ -29,6 +24,17 @@ export default function MeetUsPage() {
       </section>
 
       <section className="page-shell section-pad">
+        <div className="grid grid-cols-3 gap-4 mb-10">
+          {[
+            { src: "/images/meet-us/meetus_section1.webp", alt: "Bubby and Amira" },
+            { src: "/images/meet-us/meetus_section1_1.webp", alt: "Bubby and Amira" },
+            { src: "/images/meet-us/meetus_section1_2.webp", alt: "Bubby and Amira" },
+          ].map((img) => (
+            <div key={img.src} className="relative aspect-[3/4] overflow-hidden rounded-2xl">
+              <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="(max-width: 768px) 33vw, 25vw" />
+            </div>
+          ))}
+        </div>
         <div className="grid gap-7 md:grid-cols-2">
           <Card className="bg-[var(--color-peach)]/70 perspective-slab">
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gray-500)]">
