@@ -51,7 +51,7 @@ export default function Home() {
               src="/images/home/home_section1.webp"
               alt="Bubby and Amira"
               fill
-              className="object-cover"
+              className="object-cover object-[center_60%]"
               priority
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
