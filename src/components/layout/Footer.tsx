@@ -1,4 +1,5 @@
 import Link from "next/link";
+import WaitlistButton from "@/components/waitlist/WaitlistButton";
 
 const socials = [
   {
@@ -62,19 +63,14 @@ export default function Footer() {
           <p className="mb-3 text-xs uppercase tracking-[0.2em] text-[var(--color-gray-500)]">
             Stay in the loop
           </p>
-          <form className="flex max-w-sm gap-3">
-            <input
-              type="email"
-              placeholder="your email"
-              className="flex-1 rounded-2xl border border-transparent bg-white px-4 py-2.5 text-sm text-[var(--color-charcoal)] placeholder:text-[var(--color-gray-500)] focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="rounded-2xl bg-[var(--color-charcoal)] px-5 py-2.5 text-sm text-white transition hover:opacity-80"
-            >
-              Sure
-            </button>
-          </form>
+          <div className="flex max-w-md flex-col items-start gap-3">
+            <p className="text-sm text-[var(--color-gray-500)]">
+              bubby will notify you when he feels like it.
+            </p>
+            <WaitlistButton source="footer-cta">
+              sure i like you, add me
+            </WaitlistButton>
+          </div>
         </div>
 
         <div className="flex flex-col items-start justify-between gap-4 border-t border-[var(--color-gray-200)] pt-6 text-xs text-[var(--color-gray-500)] md:flex-row md:items-center">

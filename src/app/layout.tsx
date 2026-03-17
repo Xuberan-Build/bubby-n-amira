@@ -3,6 +3,8 @@ import { Poppins, Work_Sans } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
+import { CartProvider } from "@/context/CartContext";
+import { WaitlistProvider } from "@/components/waitlist/WaitlistProvider";
 
 const displayFont = Poppins({
   variable: "--font-display",
@@ -31,9 +33,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${displayFont.variable} ${bodyFont.variable} antialiased`}>
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <CartProvider>
+          <WaitlistProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </WaitlistProvider>
+        </CartProvider>
       </body>
     </html>
   );

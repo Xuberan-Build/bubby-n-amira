@@ -8,6 +8,8 @@ type ButtonProps = {
   href?: string;
   variant?: ButtonVariant;
   className?: string;
+  onClick?: () => void;
+  disabled?: boolean;
 };
 
 const baseClasses =
@@ -25,6 +27,8 @@ export default function Button({
   href,
   variant = "primary",
   className = "",
+  onClick,
+  disabled,
 }: ButtonProps) {
   const classes = `${baseClasses} ${variantClasses[variant]} ${className}`;
 
@@ -53,7 +57,12 @@ export default function Button({
   }
 
   return (
-    <button className={classes} type="button">
+    <button
+      className={classes}
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+    >
       {children}
     </button>
   );
