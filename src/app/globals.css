@@ -129,9 +129,10 @@ a {
 
 .blob {
   position: absolute;
-  border-radius: 999px;
+  z-index: -1;
   filter: blur(0px);
   opacity: 0.7;
+  pointer-events: none;
   animation: float 24s ease-in-out infinite;
 }
 
