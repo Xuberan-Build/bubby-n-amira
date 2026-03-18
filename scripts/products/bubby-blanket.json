@@ -1,0 +1,18 @@
+{
+  "title": "The Bubby Blanket",
+  "description": "<p>Soft. He approves. That's the whole review. A generous fleece blend blanket that Bubby has personally napped on. Machine wash cold, tumble dry low.</p>",
+  "vendor": "Bubby n Amira",
+  "type": "Home & Living",
+  "status": "DRAFT",
+  "publish": false,
+  "tags": ["bubby", "blanket", "fleece", "home"],
+  "variants": [
+    {
+      "title": "Default Title",
+      "price": "48.00",
+      "sku": "BNA-BLANKET-001",
+      "requiresShipping": true,
+      "taxable": true
+    }
+  ]
+}

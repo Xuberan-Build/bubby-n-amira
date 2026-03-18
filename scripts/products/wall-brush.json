@@ -1,0 +1,18 @@
+{
+  "title": "The Wall Brush",
+  "description": "<p>Bubby's actual wall brush. The one that started this. Natural bristles, wooden handle. Cat-tested, Amira-approved.</p>",
+  "vendor": "Bubby n Amira",
+  "type": "Pet Accessories",
+  "status": "DRAFT",
+  "publish": false,
+  "tags": ["bubby", "wall-brush", "cat", "grooming"],
+  "variants": [
+    {
+      "title": "Default Title",
+      "price": "24.00",
+      "sku": "BNA-WALLBRUSH-001",
+      "requiresShipping": true,
+      "taxable": true
+    }
+  ]
+}

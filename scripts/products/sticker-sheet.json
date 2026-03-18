@@ -1,0 +1,18 @@
+{
+  "title": "The Sticker Sheet",
+  "description": "<p>Artist being sourced. Worth the wait. Matte vinyl stickers featuring Bubby and friends. Weather resistant, multiple stickers per sheet.</p>",
+  "vendor": "Bubby n Amira",
+  "type": "Stationery",
+  "status": "DRAFT",
+  "publish": false,
+  "tags": ["bubby", "stickers", "vinyl", "coming-soon"],
+  "variants": [
+    {
+      "title": "Default Title",
+      "price": "10.00",
+      "sku": "BNA-STICKER-001",
+      "requiresShipping": true,
+      "taxable": true
+    }
+  ]
+}

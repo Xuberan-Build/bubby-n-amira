@@ -81,6 +81,9 @@ export default function Footer() {
             <Link href="/amira" className="link-underline">
               Meet Us
             </Link>
+            <Link href="/waitlist" className="link-underline">
+              Waitlist
+            </Link>
             <Link href="/contact" className="link-underline">
               Contact
             </Link>

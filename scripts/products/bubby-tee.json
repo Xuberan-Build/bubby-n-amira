@@ -1,0 +1,46 @@
+{
+  "title": "The Bubby Tee",
+  "description": "<p>100% cotton. Made for you when you order. Bubby on it. Pre-shrunk, unisex fit, machine wash cold. Ships in 5–10 business days.</p>",
+  "vendor": "Bubby n Amira",
+  "type": "Apparel",
+  "status": "DRAFT",
+  "publish": false,
+  "tags": ["bubby", "tee", "shirt", "apparel", "print-on-demand"],
+  "variants": [
+    {
+      "title": "S",
+      "price": "38.00",
+      "sku": "BNA-TEE-S",
+      "requiresShipping": true,
+      "taxable": true
+    },
+    {
+      "title": "M",
+      "price": "38.00",
+      "sku": "BNA-TEE-M",
+      "requiresShipping": true,
+      "taxable": true
+    },
+    {
+      "title": "L",
+      "price": "38.00",
+      "sku": "BNA-TEE-L",
+      "requiresShipping": true,
+      "taxable": true
+    },
+    {
+      "title": "XL",
+      "price": "38.00",
+      "sku": "BNA-TEE-XL",
+      "requiresShipping": true,
+      "taxable": true
+    },
+    {
+      "title": "2XL",
+      "price": "38.00",
+      "sku": "BNA-TEE-2XL",
+      "requiresShipping": true,
+      "taxable": true
+    }
+  ]
+}
