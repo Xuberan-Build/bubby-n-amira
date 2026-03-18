@@ -1,5 +1,7 @@
 const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN!;
 const API_VERSION = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_API_VERSION ?? "2026-01";
+const PUBLIC_TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_PUBLIC_TOKEN!;
+const PRIVATE_TOKEN = process.env.SHOPIFY_STOREFRONT_PRIVATE_TOKEN!;
 
 async function shopifyFetch<T>(
   query: string,
@@ -11,6 +13,7 @@ async function shopifyFetch<T>(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-Shopify-Storefront-Access-Token": PUBLIC_TOKEN,
       },
       body: JSON.stringify({ query, variables }),
       next: { revalidate: 60 },
@@ -215,6 +218,154 @@ export async function removeCartLine(
     { cartId, lineIds: [lineId] }
   );
   return data.cartLinesRemove.cart;
+}
+
+// ─── Server-side fetch (private token, never called from client) ───────────────
+
+export async function shopifyServerFetch<T>(
+  query: string,
+  variables?: Record<string, unknown>
+): Promise<T> {
+  const res = await fetch(
+    `https://${domain}/api/${API_VERSION}/graphql.json`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Shopify-Storefront-Private-Token": PRIVATE_TOKEN,
+      },
+      body: JSON.stringify({ query, variables }),
+      cache: "no-store",
+    }
+  );
+
+  if (!res.ok) throw new Error(`Shopify server fetch failed: ${res.status}`);
+  const json = await res.json();
+  if (json.errors) throw new Error(json.errors[0]?.message ?? "Shopify error");
+  return json.data as T;
+}
+
+// ─── Customer types ────────────────────────────────────────────────────────────
+
+export type ShopifyCustomer = {
+  id: string;
+  firstName: string | null;
+  lastName: string | null;
+  email: string;
+  phone: string | null;
+  orders: {
+    edges: {
+      node: {
+        id: string;
+        orderNumber: number;
+        processedAt: string;
+        financialStatus: string;
+        fulfillmentStatus: string;
+        currentTotalPrice: { amount: string; currencyCode: string };
+        lineItems: {
+          edges: {
+            node: { title: string; quantity: number };
+          }[];
+        };
+      };
+    }[];
+  };
+};
+
+export type CustomerUserError = { field: string[] | null; message: string };
+
+// ─── Customer mutations ────────────────────────────────────────────────────────
+
+export async function customerCreate(
+  email: string,
+  password: string,
+  firstName?: string,
+  lastName?: string
+): Promise<{ customer: { id: string } | null; errors: CustomerUserError[] }> {
+  const mutation = `
+    mutation customerCreate($input: CustomerCreateInput!) {
+      customerCreate(input: $input) {
+        customer { id }
+        customerUserErrors { field message }
+      }
+    }
+  `;
+  const data = await shopifyServerFetch<{
+    customerCreate: {
+      customer: { id: string } | null;
+      customerUserErrors: CustomerUserError[];
+    };
+  }>(mutation, { input: { email, password, firstName, lastName } });
+  return {
+    customer: data.customerCreate.customer,
+    errors: data.customerCreate.customerUserErrors,
+  };
+}
+
+export async function customerAccessTokenCreate(
+  email: string,
+  password: string
+): Promise<{ accessToken: string | null; expiresAt: string | null; errors: CustomerUserError[] }> {
+  const mutation = `
+    mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+      customerAccessTokenCreate(input: $input) {
+        customerAccessToken { accessToken expiresAt }
+        customerUserErrors { field message }
+      }
+    }
+  `;
+  const data = await shopifyServerFetch<{
+    customerAccessTokenCreate: {
+      customerAccessToken: { accessToken: string; expiresAt: string } | null;
+      customerUserErrors: CustomerUserError[];
+    };
+  }>(mutation, { input: { email, password } });
+  return {
+    accessToken: data.customerAccessTokenCreate.customerAccessToken?.accessToken ?? null,
+    expiresAt: data.customerAccessTokenCreate.customerAccessToken?.expiresAt ?? null,
+    errors: data.customerAccessTokenCreate.customerUserErrors,
+  };
+}
+
+export async function customerAccessTokenDelete(
+  accessToken: string
+): Promise<void> {
+  const mutation = `
+    mutation customerAccessTokenDelete($customerAccessToken: String!) {
+      customerAccessTokenDelete(customerAccessToken: $customerAccessToken) {
+        deletedAccessToken
+      }
+    }
+  `;
+  await shopifyServerFetch(mutation, { customerAccessToken: accessToken });
+}
+
+export async function getCustomer(
+  accessToken: string
+): Promise<ShopifyCustomer | null> {
+  const query = `
+    query getCustomer($customerAccessToken: String!) {
+      customer(customerAccessToken: $customerAccessToken) {
+        id firstName lastName email phone
+        orders(first: 20, sortKey: PROCESSED_AT, reverse: true) {
+          edges {
+            node {
+              id orderNumber processedAt financialStatus fulfillmentStatus
+              currentTotalPrice { amount currencyCode }
+              lineItems(first: 5) {
+                edges { node { title quantity } }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  const data = await shopifyServerFetch<{ customer: ShopifyCustomer | null }>(
+    query,
+    { customerAccessToken: accessToken }
+  );
+  return data.customer;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

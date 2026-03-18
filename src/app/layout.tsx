@@ -4,6 +4,7 @@ import "./globals.css";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import { CartProvider } from "@/context/CartContext";
+import { CustomerProvider } from "@/context/CustomerContext";
 import { WaitlistProvider } from "@/components/waitlist/WaitlistProvider";
 
 const displayFont = Poppins({
@@ -33,6 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${displayFont.variable} ${bodyFont.variable} antialiased`}>
+        <CustomerProvider>
         <CartProvider>
           <WaitlistProvider>
             <Header />
@@ -40,6 +42,7 @@ export default function RootLayout({
             <Footer />
           </WaitlistProvider>
         </CartProvider>
+        </CustomerProvider>
       </body>
     </html>
   );

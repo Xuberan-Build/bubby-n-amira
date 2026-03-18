@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CartIcon from "@/components/layout/CartIcon";
+import AccountIcon from "@/components/layout/AccountIcon";
 
 const navItems = [
   { href: "/available", label: "Shop" },
@@ -22,7 +23,10 @@ export default function Header() {
             </Link>
           ))}
         </nav>
-        <CartIcon />
+        <div className="flex items-center gap-1">
+          <AccountIcon />
+          <CartIcon />
+        </div>
       </div>
       <div className="page-shell border-t border-[var(--color-gray-100)] py-3 text-xs text-[var(--color-gray-500)] md:hidden">
         <div className="flex flex-wrap items-center justify-center gap-4">
