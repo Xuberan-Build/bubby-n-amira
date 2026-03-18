@@ -2,6 +2,7 @@ const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN!;
 const API_VERSION = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_API_VERSION ?? "2026-01";
 const PUBLIC_TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_PUBLIC_TOKEN!;
 const PRIVATE_TOKEN = process.env.SHOPIFY_STOREFRONT_PRIVATE_TOKEN!;
+const ADMIN_TOKEN = process.env.SHOPIFY_ADMIN_TOKEN!;
 
 async function shopifyFetch<T>(
   query: string,
@@ -23,6 +24,31 @@ async function shopifyFetch<T>(
   if (!res.ok) throw new Error(`Shopify fetch failed: ${res.status}`);
   const json = await res.json();
   if (json.errors) throw new Error(json.errors[0]?.message ?? "Shopify error");
+  return json.data as T;
+}
+
+// ─── Admin API fetch (server-only, never called from client) ──────────────────
+
+async function shopifyAdminFetch<T>(
+  query: string,
+  variables?: Record<string, unknown>
+): Promise<T> {
+  const res = await fetch(
+    `https://${domain}/admin/api/${API_VERSION}/graphql.json`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": ADMIN_TOKEN,
+      },
+      body: JSON.stringify({ query, variables }),
+      cache: "no-store",
+    }
+  );
+
+  if (!res.ok) throw new Error(`Shopify admin fetch failed: ${res.status}`);
+  const json = await res.json();
+  if (json.errors) throw new Error(json.errors[0]?.message ?? "Shopify admin error");
   return json.data as T;
 }
 
@@ -106,13 +132,13 @@ export async function getProductByHandle(
     query getProduct($handle: String!) {
       productByHandle(handle: $handle) {
         id title description tags
-        priceRange { minVariantPrice { amount currencyCode } }
+        priceRangeV2 { minVariantPrice { amount currencyCode } }
         options { name values }
         variants(first: 100) {
           edges {
             node {
               id title availableForSale
-              price { amount currencyCode }
+              price
               selectedOptions { name value }
             }
           }
@@ -123,10 +149,37 @@ export async function getProductByHandle(
       }
     }
   `;
-  const data = await shopifyFetch<{
-    productByHandle: ShopifyProduct | null;
-  }>(query, { handle });
-  return data.productByHandle;
+
+  type AdminVariantNode = Omit<ShopifyVariant, "price"> & { price: string };
+  type AdminProduct = Omit<ShopifyProduct, "priceRange" | "variants"> & {
+    priceRangeV2: { minVariantPrice: { amount: string; currencyCode: string } };
+    variants: { edges: { node: AdminVariantNode }[] };
+  };
+
+  const data = await shopifyAdminFetch<{ productByHandle: AdminProduct | null }>(
+    query,
+    { handle }
+  );
+
+  const raw = data.productByHandle;
+  if (!raw) return null;
+
+  // Normalise Admin API shape → ShopifyProduct shape
+  return {
+    ...raw,
+    priceRange: raw.priceRangeV2,
+    variants: {
+      edges: raw.variants.edges.map(({ node }) => ({
+        node: {
+          ...node,
+          price: {
+            amount: node.price,
+            currencyCode: raw.priceRangeV2.minVariantPrice.currencyCode,
+          },
+        },
+      })),
+    },
+  };
 }
 
 // ─── Cart ─────────────────────────────────────────────────────────────────────
