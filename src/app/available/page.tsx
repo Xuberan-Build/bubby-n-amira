@@ -1,109 +1,137 @@
 import Image from "next/image";
 import Link from "next/link";
-import Card from "@/components/ui/Card";
 import WaitlistButton from "@/components/waitlist/WaitlistButton";
 
 const offerings = [
   {
     name: "The Wall Brush",
-    detail: "Bubby's actual wall brush. The one that started this.",
+    role: "Grooming Station — Professional Grade",
+    detail: "Bubby's actual wall brush. The one that started this. Installed without notice. Results speak for themselves.",
     href: "/product/wall-brush",
     status: "available",
     image: "/images/products/thewallbrush1.webp",
   },
   {
     name: "The Bubby Blanket",
-    detail: "Soft. He approves. That's the whole review.",
+    role: "Treatment Table — Official",
+    detail: "Soft. He approves. That's the whole review. He selected this. You did not. It is available to you anyway.",
     href: "/product/bubby-blanket",
     status: "available",
     image: "/images/products/bubbyblanket1.webp",
   },
   {
-    name: "The Sticker Sheet",
-    detail: "Artist being sourced. Worth the wait.",
-    href: "/product/sticker-sheet",
-    status: "coming-soon",
-    image: null,
-  },
-  {
     name: "The Bubby Tee",
-    detail: "100% cotton. Made for you when you order. Bubby on it.",
+    role: "Practice Apparel — Client-Issued",
+    detail: "100% cotton. Made for you when you order. Pre-shrunk. Bubby on it. Wear it accordingly.",
     href: "/product/bubby-tee",
     status: "available",
     image: "/images/products/bubbytshirt.webp",
+  },
+  {
+    name: "The Sticker Sheet",
+    role: "Practice Certifications — Issued by Bubby",
+    detail: "Artist being sourced. Display yours when available. Eligibility is assumed if you are reading this.",
+    href: "/product/sticker-sheet",
+    status: "coming-soon",
+    image: null,
   },
 ];
 
 export default function AvailablePage() {
   return (
-    <div className="page-shell section-pad-lg">
-      <div className="grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-end">
-        <div>
-          <h1 className="font-display text-4xl md:text-5xl">
-            Shop Our Favorites
-          </h1>
-          <p className="mt-3 text-sm text-[var(--color-gray-500)]">
-            Bubby approves of all of these. For whatever that&apos;s worth.
-          </p>
+    <div>
+      {/* ── Page header ── */}
+      <section className="page-shell section-pad">
+        <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] lg:grid-cols-[1fr_1fr]">
+          <div className="bg-[var(--color-white)] px-10 py-14 flex flex-col justify-center">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-3">
+              Practice store
+            </p>
+            <h1 className="font-display text-4xl font-light leading-snug mb-6 md:text-5xl">
+              Official practice equipment.<br />Sourced and approved by Bubby.
+            </h1>
+            <p className="text-sm leading-relaxed text-[var(--color-gray-500)] max-w-md">
+              Amira was not consulted on any of these selections. If it is on
+              this page, Bubby has approved it. If it is not on this page, he
+              has not approved it yet. Check back.
+            </p>
+          </div>
+          <div className="relative min-h-[340px] bg-[var(--color-gray-100)]">
+            <Image
+              src="/images/shop/shopall_section1.webp"
+              alt="Bubby n Amira — Practice Store"
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+          </div>
         </div>
-        <div className="relative aspect-[16/7] overflow-hidden rounded-3xl">
-          <Image
-            src="/images/shop/shopall_section1.webp"
-            alt="Shop all — Bubby n Amira"
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
+      </section>
+
+      {/* ── Product grid ── */}
+      <div className="border-t border-[var(--color-gray-100)]">
+        <div className="page-shell py-14">
+          <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] md:grid-cols-2">
+            {offerings.map((item) => (
+              <div key={item.name} className="bg-[var(--color-white)] flex flex-col">
+                <div className="relative h-64 bg-[var(--color-gray-100)]">
+                  {item.image && (
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  )}
+                  {item.status === "coming-soon" && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="bg-[var(--color-white)] px-4 py-2 text-[10px] uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
+                        Coming soon
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="px-8 py-8 flex-1 flex flex-col">
+                  <p className="text-[10px] uppercase tracking-[0.14em] text-[var(--color-gray-500)] mb-2">
+                    {item.role}
+                  </p>
+                  <p className="font-display text-2xl font-light mb-3">{item.name}</p>
+                  <p className="text-sm leading-relaxed text-[var(--color-gray-500)] mb-8 flex-1">
+                    {item.detail}
+                  </p>
+                  <div className="flex items-center gap-6">
+                    <Link
+                      href={item.href}
+                      className="text-[10px] uppercase tracking-[0.14em] text-[var(--color-gray-500)] link-underline"
+                    >
+                      View details →
+                    </Link>
+                    {item.status === "coming-soon" && (
+                      <WaitlistButton source="coming-soon" variant="secondary">
+                        notify me
+                      </WaitlistButton>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="mt-12 grid gap-10">
-        {offerings.map((item) => (
-          <Card
-            key={item.name}
-            className="bg-[var(--color-gray-100)] p-0 perspective-slab overflow-hidden"
-          >
-            <div className="flex flex-col md:flex-row md:items-stretch">
-              {item.image && (
-                <div className="relative h-48 w-full shrink-0 md:h-auto md:w-48">
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 192px"
-                  />
-                </div>
-              )}
-              <div className="flex flex-1 flex-col justify-center gap-4 p-9 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <div className="flex items-center gap-3">
-                    <p className="font-display text-2xl">{item.name}</p>
-                    {item.status === "coming-soon" && (
-                      <span className="rounded-full bg-[var(--color-peach)]/60 px-3 py-1 text-xs text-[var(--color-gray-500)]">
-                        Coming soon
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-3 text-sm text-[var(--color-gray-500)]">
-                    {item.detail}
-                  </p>
-                </div>
-                <div className="flex flex-wrap items-center gap-4 shrink-0">
-                  <Link href={item.href} className="link-underline text-sm">
-                    See details
-                  </Link>
-                  {item.status === "coming-soon" ? (
-                    <WaitlistButton source="coming-soon" variant="secondary">
-                      sure i like you, add me
-                    </WaitlistButton>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          </Card>
-        ))}
+      {/* ── Quote ── */}
+      <div className="border-t border-[var(--color-gray-100)]">
+        <div className="page-shell py-14 text-center">
+          <blockquote className="font-display text-2xl font-light italic leading-relaxed max-w-2xl mx-auto mb-4 md:text-3xl">
+            &ldquo;He selected it. That&apos;s the whole endorsement.
+            I bought it. I don&apos;t regret it.&rdquo;
+          </blockquote>
+          <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--color-gray-500)]">
+            Verified client — certified by Bubby
+          </p>
+        </div>
       </div>
     </div>
   );

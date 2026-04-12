@@ -1,99 +1,210 @@
 import Image from "next/image";
 import Link from "next/link";
-import Blob from "@/components/ui/Blob";
 import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 
-const faves = [
+const credentials = [
+  { label: "Specialty", value: "Facial Kneading & Purr Therapy" },
+  { label: "Certification", value: "Self-Issued, 2021" },
+  { label: "Accepting clients", value: "At his discretion" },
+  { label: "Languages", value: "Meow. Some body language." },
+  { label: "Education", value: "Observational. Extensive." },
+  { label: "Approach", value: "Unilateral" },
+];
+
+const timeline = [
   {
-    name: "Bubby's Practical Tee",
-    detail: "A shirt. 100% cotton. Fits like a shirt should.",
-    href: "/product/bubbys-practical-tee",
+    year: "2019",
+    title: "Joined the practice",
+    desc: "Arrived without notice. Established residency. No paperwork was signed.",
   },
   {
-    name: "The Quiet Mug",
-    detail: "Ceramic. Holds coffee. That's the whole pitch.",
-    href: "/product/quiet-mug",
+    year: "2020",
+    title: "Opened the wellness division",
+    desc: "Began offering facial treatments during the lockdown period. Clients were captive. Results were mixed.",
+  },
+  {
+    year: "2021",
+    title: "Self-certified",
+    desc: "Issued his own credentials. The process was internal. The standards are not publicly available.",
+  },
+  {
+    year: "2023",
+    title: "Expanded to social media",
+    desc: "Amira began documenting the practice. Bubby did not consent but has not objected.",
+  },
+  {
+    year: "2024",
+    title: "Launched the practice store",
+    desc: "Approved a curated selection of equipment. Amira handled the logistics. She was not thanked.",
+  },
+];
+
+const philosophy = [
+  {
+    num: "I",
+    title: "Presence is the treatment",
+    body: "Bubby does not schedule sessions. He arrives when the client requires intervention, as determined solely by Bubby. Advance notice is not part of the methodology.",
+  },
+  {
+    num: "II",
+    title: "The client does not know what they need",
+    body: "Eligibility is assessed silently. Criteria are not disclosed. If Bubby has selected you, you have been selected. This is sufficient.",
+  },
+  {
+    num: "III",
+    title: "Results are guaranteed",
+    body: "Outcomes are determined by Bubby. All results are correct by definition. Client feedback is received but not incorporated.",
   },
 ];
 
 export default function BubbyPage() {
   return (
-    <div className="relative overflow-hidden">
-      <Blob className="blob-slow left-[-60px] top-24 h-64 w-64" fill="#ffdab9" />
-
-      <section className="page-shell section-pad-lg relative">
-        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-          <div className="fade-up space-y-6">
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gray-500)]">
-              Meet Bubby
-            </p>
-            <h1 className="font-display text-4xl md:text-5xl">
-              He&apos;s a cat. He has opinions.
-            </h1>
-            <p className="text-base text-[var(--color-gray-500)] md:text-lg">
-              Bubby is a cat with a rich inner life and an esthetician practice
-              that nobody asked about. He is deeply committed to Amira and
-              completely indifferent to everyone else. He has favorites. He will
-              let you know.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Button href="/available">See his picks</Button>
-              <Button href="/amira" variant="secondary">
-                Meet Us
-              </Button>
-            </div>
-          </div>
-          <div className="fade-up relative aspect-square overflow-hidden rounded-3xl" style={{ animationDelay: "120ms" }}>
+    <div>
+      {/* ── Bio header ── */}
+      <section className="page-shell section-pad">
+        <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="relative min-h-[480px] bg-[var(--color-gray-100)]">
             <Image
               src="/images/meet-bubby/meetbubby_section1.webp"
-              alt="Bubby the cat"
+              alt="Bubby — Practitioner"
               fill
-              className="object-cover"
+              className="object-cover object-top"
               priority
               sizes="(max-width: 1024px) 100vw, 45vw"
             />
           </div>
+          <div className="bg-[var(--color-white)] px-10 py-12 flex flex-col justify-center">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-3">
+              Meet the practitioner
+            </p>
+            <h1 className="font-display text-5xl font-light mb-2">Bubby</h1>
+            <p className="text-[10px] uppercase tracking-[0.14em] text-[var(--color-gray-500)] mb-8 pb-8 border-b border-[var(--color-gray-100)]">
+              Licensed Wellness Practitioner &amp; Facial Specialist — Est. whenever he decided
+            </p>
+            <p className="text-sm leading-relaxed text-[var(--color-gray-500)] mb-4">
+              Bubby is a cat with a rich inner life and an esthetician practice that
+              nobody asked about. He is deeply committed to Amira and completely
+              indifferent to everyone else.
+            </p>
+            <p className="text-sm leading-relaxed text-[var(--color-gray-500)] mb-10">
+              He has favorites. He will let you know. He is accepting new clients
+              on a rolling basis, subject to his own eligibility criteria, which
+              are not publicly available.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button href="/available">View practice equipment</Button>
+              <Button href="/amira" variant="secondary">Meet the office manager</Button>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="page-shell section-pad">
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      {/* ── Photo grid ── */}
+      <section className="page-shell pb-16">
+        <div className="grid grid-cols-4 gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)]">
           {[
-            { src: "/images/meet-bubby/meetbubby_section1_1.webp", alt: "Bubby" },
-            { src: "/images/meet-bubby/meetbubby_section1_2.webp", alt: "Bubby" },
-            { src: "/images/meet-bubby/meetbubby_section1_3.webp", alt: "Bubby" },
-            { src: "/images/meet-bubby/meetbubby_section1_4.webp", alt: "Bubby" },
+            { src: "/images/meet-bubby/meetbubby_section1_1.webp", alt: "Bubby in practice" },
+            { src: "/images/meet-bubby/meetbubby_section1_2.webp", alt: "Bubby assessing a client" },
+            { src: "/images/meet-bubby/meetbubby_section1_3.webp", alt: "Bubby at rest" },
+            { src: "/images/meet-bubby/meetbubby_section1_4.webp", alt: "Bubby in session" },
           ].map((img) => (
-            <div key={img.src} className="relative aspect-square overflow-hidden rounded-2xl">
-              <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
+            <div key={img.src} className="relative aspect-square overflow-hidden">
+              <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="25vw" />
             </div>
           ))}
         </div>
       </section>
 
-      <section className="page-shell section-pad">
-        <h2 className="font-display text-3xl">Bubby&apos;s Current Faves</h2>
-        <p className="mt-2 text-sm text-[var(--color-gray-500)]">
-          He curated this list himself. Technically.
-        </p>
-        <div className="mt-8 grid gap-7 md:grid-cols-2">
-          {faves.map((item) => (
-            <Card key={item.name} className="bg-[var(--color-gray-100)]">
-              <p className="font-display text-lg">{item.name}</p>
-              <p className="mt-3 text-sm text-[var(--color-gray-500)]">
-                {item.detail}
-              </p>
-              <Link
-                href={item.href}
-                className="mt-5 inline-flex text-sm link-underline"
-              >
-                See details
-              </Link>
-            </Card>
-          ))}
+      {/* ── Credentials ── */}
+      <div className="border-t border-[var(--color-gray-100)]">
+        <div className="page-shell py-14">
+          <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-3">
+            Credentials &amp; qualifications
+          </p>
+          <h2 className="font-display text-3xl font-light mb-10">
+            Fully certified. By himself.
+          </h2>
+          <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] md:grid-cols-3">
+            {credentials.map((c) => (
+              <div key={c.label} className="bg-[var(--color-white)] px-7 py-8">
+                <p className="text-[10px] uppercase tracking-[0.14em] text-[var(--color-gray-500)] mb-3">
+                  {c.label}
+                </p>
+                <p className="font-display text-lg font-light">{c.value}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </section>
+      </div>
+
+      {/* ── Practice Philosophy (new) ── */}
+      <div className="border-t border-[var(--color-gray-100)]">
+        <div className="page-shell py-14">
+          <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-3">
+            Practice philosophy
+          </p>
+          <h2 className="font-display text-3xl font-light mb-10">
+            The methodology. It is not up for discussion.
+          </h2>
+          <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] md:grid-cols-3">
+            {philosophy.map((p) => (
+              <div key={p.num} className="bg-[var(--color-white)] px-7 py-8">
+                <p className="font-display text-4xl font-light text-[var(--color-gray-100)] mb-4">
+                  {p.num}
+                </p>
+                <p className="font-display text-xl font-light mb-4">{p.title}</p>
+                <p className="text-sm leading-relaxed text-[var(--color-gray-500)]">{p.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Timeline ── */}
+      <div className="border-t border-[var(--color-gray-100)]">
+        <div className="page-shell py-14">
+          <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-3">
+            Practice history
+          </p>
+          <h2 className="font-display text-3xl font-light mb-10">
+            A distinguished career.
+          </h2>
+          <div className="border border-[var(--color-gray-100)]">
+            {timeline.map((item, i) => (
+              <div
+                key={item.year}
+                className={`grid grid-cols-[80px_1fr] gap-6 px-7 py-7 ${i < timeline.length - 1 ? "border-b border-[var(--color-gray-100)]" : ""}`}
+              >
+                <p className="text-[10px] uppercase tracking-[0.14em] text-[var(--color-gray-500)] pt-1">
+                  {item.year}
+                </p>
+                <div>
+                  <p className="font-display text-lg font-light mb-2">{item.title}</p>
+                  <p className="text-sm leading-relaxed text-[var(--color-gray-500)]">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Quote ── */}
+      <div className="border-t border-[var(--color-gray-100)]">
+        <div className="page-shell py-14 text-center">
+          <blockquote className="font-display text-2xl font-light italic leading-relaxed max-w-2xl mx-auto mb-4 md:text-3xl">
+            &ldquo;He assessed me. I passed. I don&apos;t know the criteria.
+            I&apos;m displaying my certification.&rdquo;
+          </blockquote>
+          <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--color-gray-500)]">
+            Verified client — certified by Bubby
+          </p>
+          <div className="mt-10">
+            <Link href="/available" className="text-[10px] uppercase tracking-[0.14em] text-[var(--color-gray-500)] link-underline">
+              View practice equipment →
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

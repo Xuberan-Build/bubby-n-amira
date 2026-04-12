@@ -1,10 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import Blob from "@/components/ui/Blob";
-import Card from "@/components/ui/Card";
 import AddToCart from "@/components/product/AddToCart";
-import Button from "@/components/ui/Button";
 import WaitlistButton from "@/components/waitlist/WaitlistButton";
 import { getProductByHandle, formatPrice } from "@/lib/shopify";
 
@@ -18,7 +15,6 @@ const localImages: Record<string, string[]> = {
   "sticker-sheet": [],
 };
 
-// Supplementary copy that lives here (not in Shopify) — materials, care, specs, shipping
 const supplementary: Record<
   string,
   {
@@ -30,14 +26,14 @@ const supplementary: Record<
   }
 > = {
   "wall-brush": {
-    tagline: "Offering",
+    tagline: "Practice Equipment",
     materials: "Natural bristles, wooden handle",
     care: "Wipe clean with a damp cloth",
     specs: ["Natural bristles", "Wooden handle", "Cat-tested"],
     shipping: "Ships in 3–7 business days.",
   },
   "bubby-blanket": {
-    tagline: "Offering",
+    tagline: "Practice Equipment",
     materials: "Soft fleece blend",
     care: "Machine wash cold, tumble dry low",
     specs: ["Fleece blend", "Generous size", "Cat-approved warmth"],
@@ -51,7 +47,7 @@ const supplementary: Record<
     shipping: "Available soon.",
   },
   "bubby-tee": {
-    tagline: "Offering",
+    tagline: "Practice Equipment",
     materials: "100% cotton, pre-shrunk",
     care: "Machine wash cold, tumble dry low",
     specs: ["100% cotton", "Pre-shrunk", "Machine wash cold", "Unisex fit"],
@@ -77,7 +73,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   if (!product) notFound();
 
   const extra = supplementary[handle] ?? {
-    tagline: "Offering",
+    tagline: "Practice Equipment",
     materials: "—",
     care: "—",
     specs: [],
@@ -87,9 +83,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const variants = product.variants.edges.map((e) => e.node);
   const shopifyImages = product.images.edges.map((e) => e.node);
   const fallbacks = localImages[handle] ?? [];
-  const images = shopifyImages.length > 0
-    ? shopifyImages
-    : fallbacks.map((src) => ({ url: src, altText: null }));
+  const images =
+    shopifyImages.length > 0
+      ? shopifyImages
+      : fallbacks.map((src) => ({ url: src, altText: null }));
   const available = variants.some((v) => v.availableForSale);
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
@@ -101,34 +98,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
     .slice(0, 3);
 
   return (
-    <div className="relative overflow-hidden">
-      <Blob className="blob-slow left-[-80px] top-20 h-72 w-72" fill="#fff4cc" />
-      <section className="page-shell section-pad-lg relative">
-        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
-          {/* Images */}
-          <div className="grid gap-5">
-            <div className="soft-card bg-[var(--color-gray-100)] p-6 perspective-slab">
-              {images[0] ? (
-                <div className="relative aspect-square overflow-hidden rounded-2xl">
-                  <Image
-                    src={images[0].url}
-                    alt={images[0].altText ?? product.title}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-              ) : (
-                <div className="aspect-square rounded-2xl bg-[var(--color-gray-500)]/10" />
-              )}
-            </div>
+    <div>
+      {/* ── Main product grid ── */}
+      <section className="page-shell section-pad">
+        <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] lg:grid-cols-[1.1fr_0.9fr]">
+
+          {/* Image column */}
+          <div className="bg-[var(--color-white)]">
+            {images[0] ? (
+              <div className="relative aspect-[3/4] w-full overflow-hidden">
+                <Image
+                  src={images[0].url}
+                  alt={images[0].altText ?? product.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            ) : (
+              <div className="aspect-[3/4] bg-[var(--color-gray-100)]" />
+            )}
             {images.length > 1 && (
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-px bg-[var(--color-gray-100)] border-t border-[var(--color-gray-100)]">
                 {images.slice(1, 4).map((img, i) => (
-                  <div
-                    key={i}
-                    className="relative aspect-square overflow-hidden rounded-2xl"
-                  >
+                  <div key={i} className="relative aspect-square overflow-hidden">
                     <Image
                       src={img.url}
                       alt={img.altText ?? product.title}
@@ -139,43 +132,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 ))}
               </div>
             )}
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="soft-card bg-[var(--color-peach)]/60 p-5 tilt-left">
-                <p className="text-xs uppercase tracking-[0.25em] text-[var(--color-gray-500)]">
-                  Materials
-                </p>
-                <p className="mt-2 text-sm text-[var(--color-gray-500)]">
-                  {extra.materials}
-                </p>
-              </div>
-              <div className="soft-card bg-[var(--color-mint)]/70 p-5 tilt-right">
-                <p className="text-xs uppercase tracking-[0.25em] text-[var(--color-gray-500)]">
-                  Care
-                </p>
-                <p className="mt-2 text-sm text-[var(--color-gray-500)]">
-                  {extra.care}
-                </p>
-              </div>
-            </div>
           </div>
 
-          {/* Details */}
-          <div className="space-y-8">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-gray-500)]">
+          {/* Details column */}
+          <div className="bg-[var(--color-white)] px-10 py-12 flex flex-col gap-8">
+
+            {/* Header */}
+            <div className="border-b border-[var(--color-gray-100)] pb-8">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-3">
                 {extra.tagline}
               </p>
-              <h1 className="font-display text-4xl">{product.title}</h1>
-              <p className="mt-3 text-base text-[var(--color-gray-500)]">
+              <h1 className="font-display text-4xl font-light leading-snug mb-5">
+                {product.title}
+              </h1>
+              <p className="text-base leading-relaxed text-[var(--color-gray-500)]">
                 {product.description}
               </p>
             </div>
 
+            {/* CTA */}
             {!available ? (
-              <div className="grid gap-4">
+              <div className="space-y-4">
                 <p className="text-sm text-[var(--color-gray-500)]">
-                  Not available yet. Join Bubby&apos;s waitlist and he might tell
-                  you when it drops.
+                  Not available yet. Join Bubby&apos;s waitlist and he might
+                  tell you when it drops.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <WaitlistButton source="coming-soon">
@@ -187,14 +167,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               </div>
             ) : (
-              <>
-                <div className="flex items-center gap-4">
-                  <span className="text-xl font-semibold">{price}</span>
-                </div>
-
+              <div className="space-y-6">
+                <p className="font-display text-2xl font-light">{price}</p>
                 <AddToCart variants={variants} options={product.options} />
-
-                <div className="grid gap-3 text-xs text-[var(--color-gray-500)]">
+                <div className="space-y-2 text-xs text-[var(--color-gray-500)]">
                   <p>{extra.shipping}</p>
                   <p>
                     Something wrong?{" "}
@@ -203,38 +179,73 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     </Link>
                   </p>
                 </div>
-              </>
+              </div>
             )}
 
-            {!available && (
-              <Button variant="secondary" href="/available">
-                Back to offerings
-              </Button>
-            )}
+            {/* Materials + Care */}
+            <div className="grid grid-cols-2 gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)]">
+              <div className="bg-[var(--color-peach)]/60 px-5 py-6 tilt-left">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-gray-500)] mb-2">
+                  Materials
+                </p>
+                <p className="text-sm text-[var(--color-gray-500)]">
+                  {extra.materials}
+                </p>
+              </div>
+              <div className="bg-[var(--color-mint)]/70 px-5 py-6 tilt-right">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-gray-500)] mb-2">
+                  Care
+                </p>
+                <p className="text-sm text-[var(--color-gray-500)]">
+                  {extra.care}
+                </p>
+              </div>
+            </div>
 
-            <Card className="bg-[var(--color-gray-100)] perspective-slab">
-              <h3 className="font-display text-lg">Specifications</h3>
-              <ul className="mt-3 space-y-2 text-sm text-[var(--color-gray-500)]">
+            {/* Specs */}
+            <div className="border border-[var(--color-gray-100)] px-6 py-6">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-4">
+                Specifications
+              </p>
+              <ul className="space-y-2">
                 {extra.specs.map((spec) => (
-                  <li key={spec}>{spec}</li>
+                  <li key={spec} className="text-sm text-[var(--color-gray-500)] flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-[var(--color-gray-500)] shrink-0" />
+                    {spec}
+                  </li>
                 ))}
               </ul>
-            </Card>
+            </div>
           </div>
         </div>
       </section>
 
+      {/* ── Bubby's Recommendations ── */}
       {otherProducts.length > 0 && (
-        <section className="page-shell section-pad">
-          <h2 className="font-display text-2xl">Other things Bubby likes</h2>
-          <div className="mt-6 flex flex-wrap gap-4">
-            {otherProducts.map((p) => (
-              <Link key={p.href} href={p.href} className="text-sm link-underline">
-                {p.name}
-              </Link>
-            ))}
+        <div className="border-t border-[var(--color-gray-100)]">
+          <div className="page-shell py-14">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-2">
+              Also approved by Bubby
+            </p>
+            <p className="font-display text-2xl font-light mb-8">
+              He recommends these without being asked.
+            </p>
+            <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] md:grid-cols-3">
+              {otherProducts.map((p) => (
+                <Link
+                  key={p.href}
+                  href={p.href}
+                  className="bg-[var(--color-white)] px-6 py-8 flex items-center justify-between group hover:bg-[var(--color-gray-100)] transition-colors"
+                >
+                  <span className="font-display text-lg font-light">{p.name}</span>
+                  <span className="text-[10px] uppercase tracking-[0.12em] text-[var(--color-gray-500)] group-hover:text-[var(--color-charcoal)] transition-colors">
+                    View →
+                  </span>
+                </Link>
+              ))}
+            </div>
           </div>
-        </section>
+        </div>
       )}
     </div>
   );
