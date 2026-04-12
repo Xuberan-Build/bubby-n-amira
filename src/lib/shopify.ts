@@ -130,15 +130,15 @@ export async function getProductByHandle(
 ): Promise<ShopifyProduct | null> {
   const query = `
     query getProduct($handle: String!) {
-      productByHandle(handle: $handle) {
+      product(handle: $handle) {
         id title description tags
-        priceRangeV2 { minVariantPrice { amount currencyCode } }
+        priceRange { minVariantPrice { amount currencyCode } }
         options { name values }
         variants(first: 100) {
           edges {
             node {
               id title availableForSale
-              price
+              price { amount currencyCode }
               selectedOptions { name value }
             }
           }
@@ -150,36 +150,12 @@ export async function getProductByHandle(
     }
   `;
 
-  type AdminVariantNode = Omit<ShopifyVariant, "price"> & { price: string };
-  type AdminProduct = Omit<ShopifyProduct, "priceRange" | "variants"> & {
-    priceRangeV2: { minVariantPrice: { amount: string; currencyCode: string } };
-    variants: { edges: { node: AdminVariantNode }[] };
-  };
-
-  const data = await shopifyAdminFetch<{ productByHandle: AdminProduct | null }>(
+  const data = await shopifyFetch<{ product: ShopifyProduct | null }>(
     query,
     { handle }
   );
 
-  const raw = data.productByHandle;
-  if (!raw) return null;
-
-  // Normalise Admin API shape → ShopifyProduct shape
-  return {
-    ...raw,
-    priceRange: raw.priceRangeV2,
-    variants: {
-      edges: raw.variants.edges.map(({ node }) => ({
-        node: {
-          ...node,
-          price: {
-            amount: node.price,
-            currencyCode: raw.priceRangeV2.minVariantPrice.currencyCode,
-          },
-        },
-      })),
-    },
-  };
+  return data.product;
 }
 
 // ─── Cart ─────────────────────────────────────────────────────────────────────
