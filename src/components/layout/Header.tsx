@@ -3,7 +3,7 @@ import CartIcon from "@/components/layout/CartIcon";
 import AccountIcon from "@/components/layout/AccountIcon";
 
 const navItems = [
-  { href: "/available", label: "Shop" },
+  { href: "/available", label: "Practice Store" },
   { href: "/bubby", label: "Meet Bubby" },
   { href: "/amira", label: "Meet Us" },
   { href: "/contact", label: "Contact" },

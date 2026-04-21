@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
+import PhotoCarousel from "@/components/ui/PhotoCarousel";
 
 const credentials = [
   { label: "Specialty", value: "Facial Kneading & Purr Therapy" },
@@ -99,20 +100,20 @@ export default function BubbyPage() {
         </div>
       </section>
 
-      {/* ── Photo grid ── */}
+      {/* ── Photo carousel ── */}
       <section className="page-shell pb-16">
-        <div className="grid grid-cols-4 gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)]">
-          {[
+        <PhotoCarousel
+          slides={[
             { src: "/images/meet-bubby/meetbubby_section1_1.webp", alt: "Bubby in practice" },
             { src: "/images/meet-bubby/meetbubby_section1_2.webp", alt: "Bubby assessing a client" },
-            { src: "/images/meet-bubby/meetbubby_section1_3.webp", alt: "Bubby at rest" },
+            { src: "/images/meet-bubby/meetbubby_section1_2b.webp", alt: "Bubby at rest" },
+            { src: "/images/meet-bubby/meetbubby_section1_3.webp", alt: "Bubby considering you" },
             { src: "/images/meet-bubby/meetbubby_section1_4.webp", alt: "Bubby in session" },
-          ].map((img) => (
-            <div key={img.src} className="relative aspect-square overflow-hidden">
-              <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="25vw" />
-            </div>
-          ))}
-        </div>
+          ]}
+          interval={3200}
+          sizes="(max-width: 1200px) 100vw, 1200px"
+          className="aspect-[3/1] min-h-[240px] border border-[var(--color-gray-100)]"
+        />
       </section>
 
       {/* ── Credentials ── */}

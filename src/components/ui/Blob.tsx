@@ -1,25 +1,93 @@
 import type { CSSProperties } from "react";
 
-type BlobProps = {
-  className?: string;
-  style?: CSSProperties;
-  fill?: string;
+type Circle = { cx: number; cy: number; r: number };
+
+type BlobVariant = {
+  circles: Circle[];
+  viewBox: string;
 };
 
-export default function Blob({ className = "", style, fill = "#FF9AA2" }: BlobProps) {
+// Each variant is 3-4 overlapping circles that merge via goo filter
+// into a smooth multi-lobe organic shape
+const variants: Record<number, BlobVariant> = {
+  // Three lobes — triangular cluster
+  1: {
+    viewBox: "-20 -20 310 300",
+    circles: [
+      { cx: 100, cy: 75,  r: 78 },
+      { cx: 198, cy: 100, r: 68 },
+      { cx: 148, cy: 188, r: 72 },
+    ],
+  },
+  // Four lobes — soft square cluster
+  2: {
+    viewBox: "-20 -20 310 310",
+    circles: [
+      { cx: 88,  cy: 88,  r: 72 },
+      { cx: 195, cy: 82,  r: 65 },
+      { cx: 82,  cy: 192, r: 65 },
+      { cx: 198, cy: 196, r: 70 },
+    ],
+  },
+  // Two large lobes — horizontal pair
+  3: {
+    viewBox: "-20 -20 330 250",
+    circles: [
+      { cx: 88,  cy: 118, r: 85 },
+      { cx: 215, cy: 112, r: 80 },
+    ],
+  },
+  // Three lobes — horizontal chain
+  4: {
+    viewBox: "-20 -20 370 240",
+    circles: [
+      { cx: 75,  cy: 115, r: 70 },
+      { cx: 180, cy: 100, r: 80 },
+      { cx: 278, cy: 118, r: 66 },
+    ],
+  },
+};
+
+type BlobProps = {
+  id: string;
+  variant?: 1 | 2 | 3 | 4;
+  fill?: string;
+  className?: string;
+  style?: CSSProperties;
+};
+
+export default function Blob({ id, variant = 1, fill = "#FF9AA2", className = "", style }: BlobProps) {
+  const v = variants[variant];
+  const filterId = `goo-${id}`;
+
   return (
     <svg
-      viewBox="0 0 200 200"
+      viewBox={v.viewBox}
       xmlns="http://www.w3.org/2000/svg"
       className={`blob ${className}`}
       style={style}
       aria-hidden
     >
-      <path
-        fill={fill}
-        d="M28.5,-46C36.3,-33.7,41.3,-24.4,46.5,-13.9C51.6,-3.3,56.8,8.4,58.6,24.1C60.5,39.8,58.9,59.4,48.6,65.6C38.3,71.8,19.1,64.5,0.7,63.6C-17.8,62.7,-35.7,68.1,-41.9,60.6C-48.2,53.1,-42.8,32.7,-49.6,15.3C-56.3,-2.1,-75.1,-16.3,-78,-30.9C-80.9,-45.5,-67.9,-60.5,-52.2,-70.3C-36.6,-80.2,-18.3,-84.8,-3.9,-79.3C10.4,-73.9,20.8,-58.4,28.5,-46Z"
-        transform="translate(100 100)"
-      />
+      <defs>
+        <filter
+          id={filterId}
+          x="-30%" y="-30%" width="160%" height="160%"
+          colorInterpolationFilters="sRGB"
+        >
+          <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blur" />
+          <feColorMatrix
+            in="blur"
+            type="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"
+            result="goo"
+          />
+        </filter>
+      </defs>
+      <g filter={`url(#${filterId})`}>
+        {v.circles.map((c, i) => (
+          <circle key={i} cx={c.cx} cy={c.cy} r={c.r} fill={fill} />
+        ))}
+      </g>
     </svg>
   );
 }

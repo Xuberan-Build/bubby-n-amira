@@ -42,7 +42,7 @@ export default function WaitlistPage() {
 
   return (
     <div className="relative overflow-hidden">
-      <Blob className="blob-slow right-[-60px] top-20 h-72 w-72" fill="#e5d9f2" />
+      <Blob id="waitlist-page" variant={1} fill="#e5d9f2" className="blob-slow" style={{ width: 288, height: 288, right: -60, top: 80 }} />
 
       <section className="page-shell section-pad-lg relative">
         {submitted ? (

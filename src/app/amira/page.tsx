@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Button from "@/components/ui/Button";
+import PhotoCarousel from "@/components/ui/PhotoCarousel";
 
 const socialStats = [
   { stat: "445K", label: "TikTok followers" },
-  { stat: "58.4M", label: "TikTok likes" },
-  { stat: "3", label: "Platforms" },
+  { stat: "89K", label: "Facebook followers" },
+  { stat: "56K", label: "Instagram followers" },
   { stat: "∞", label: "Bubby's demands" },
 ];
 
@@ -14,26 +15,17 @@ export default function MeetUsPage() {
       {/* ── Hero ── */}
       <section className="page-shell section-pad">
         <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] lg:grid-cols-[1.1fr_0.9fr]">
-          {/* Photo grid */}
-          <div className="grid grid-cols-2 gap-px bg-[var(--color-gray-100)]">
-            {[
+          {/* Photo carousel */}
+          <PhotoCarousel
+            slides={[
               { src: "/images/meet-us/meetus_section1.webp", alt: "Bubby and Amira" },
               { src: "/images/meet-us/meetus_section1_1.webp", alt: "Bubby and Amira" },
               { src: "/images/meet-us/meetus_section1_2.webp", alt: "Bubby and Amira" },
-              { src: "/images/meet-us/meetus_section1_2.webp", alt: "Bubby and Amira" },
-            ].map((img, i) => (
-              <div key={i} className="relative aspect-square overflow-hidden">
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 50vw, 25vw"
-                  priority={i === 0}
-                />
-              </div>
-            ))}
-          </div>
+            ]}
+            interval={3800}
+            sizes="(max-width: 1024px) 100vw, 55vw"
+            className="min-h-[420px]"
+          />
 
           {/* Intro text */}
           <div className="bg-[var(--color-white)] px-10 py-12 flex flex-col justify-center">
@@ -124,7 +116,7 @@ export default function MeetUsPage() {
             </div>
             <div className="relative min-h-[400px] bg-[var(--color-gray-100)]">
               <Image
-                src="/images/meet-us/meetus_section1_1.webp"
+                src="/images/meet-us/meetus_section1.webp"
                 alt="Bubby and Amira"
                 fill
                 className="object-cover"
