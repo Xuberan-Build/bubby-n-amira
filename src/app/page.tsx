@@ -52,6 +52,7 @@ const products = [
     note: "He selected this. You did not.",
     href: "/product/bubby-blanket",
     image: "/images/products/bubbyblanket1.webp",
+    imagePos: "60% 50%",
   },
   {
     name: "The Wall Brush",
@@ -59,6 +60,7 @@ const products = [
     note: "Installed without notice.",
     href: "/product/wall-brush",
     image: "/images/products/thewallbrush1.webp",
+    imagePos: "50% 35%",
   },
   {
     name: "The Sticker Sheet",
@@ -66,6 +68,7 @@ const products = [
     note: "Display yours accordingly.",
     href: "/product/sticker-sheet",
     image: null,
+    imagePos: undefined,
   },
 ];
 
@@ -152,11 +155,11 @@ export default function Home() {
       {/* ── Moments carousel ── */}
       <PhotoCarousel
         slides={[
-          { src: "/images/home/home_section1.webp",      alt: "Bubby in practice" },
-          { src: "/images/home/home_section1_2.webp",    alt: "Bubby smushing Amira" },
-          { src: "/images/home/home_section1_3.webp",    alt: "Bubby on the job" },
-          { src: "/images/home/home_section1_alt1.webp", alt: "Bubby at work" },
-          { src: "/images/home/home_section1_alt2.webp", alt: "Bubby and Amira" },
+          { src: "/images/home/home_section1.webp",      alt: "Bubby in practice",    pos: "50% 70%" },
+          { src: "/images/home/home_section1_2.webp",    alt: "Bubby smushing Amira", pos: "50% 55%" },
+          { src: "/images/home/home_section1_3.webp",    alt: "Bubby on the job",     pos: "45% 35%" },
+          { src: "/images/home/home_section1_alt1.webp", alt: "Bubby at work",        pos: "55% 38%" },
+          { src: "/images/home/home_section1_alt2.webp", alt: "Bubby and Amira",      pos: "50% 40%" },
         ]}
         interval={4000}
         sizes="100vw"
@@ -181,7 +184,7 @@ export default function Home() {
                 src="/images/home/aboutus_section1.webp"
                 alt="Amira"
                 fill
-                className="object-cover object-[50%_30%]"
+                className="object-cover object-[50%_42%]"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
@@ -237,6 +240,7 @@ export default function Home() {
                       alt={p.name}
                       fill
                       className="object-cover"
+                      style={p.imagePos ? { objectPosition: p.imagePos } : undefined}
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
                   ) : (

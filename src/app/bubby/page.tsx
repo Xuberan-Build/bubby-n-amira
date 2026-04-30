@@ -77,7 +77,7 @@ export default function BubbyPage() {
               src="/images/meet-bubby/meetbubby_section1.webp"
               alt="Bubby — Practitioner"
               fill
-              className="object-cover object-top"
+              className="object-cover object-center"
               priority
               sizes="(max-width: 1024px) 100vw, 45vw"
             />
@@ -112,11 +112,11 @@ export default function BubbyPage() {
       <section className="page-shell pb-16">
         <PhotoCarousel
           slides={[
-            { src: "/images/meet-bubby/meetbubby_section1_1.webp", alt: "Bubby in practice" },
-            { src: "/images/meet-bubby/meetbubby_section1_2.webp", alt: "Bubby assessing a client" },
-            { src: "/images/meet-bubby/meetbubby_section1_2b.webp", alt: "Bubby at rest" },
-            { src: "/images/meet-bubby/meetbubby_section1_3.webp", alt: "Bubby considering you" },
-            { src: "/images/meet-bubby/meetbubby_section1_4.webp", alt: "Bubby in session" },
+            { src: "/images/meet-bubby/meetbubby_section1_1.webp", alt: "Bubby in practice",      pos: "50% 15%" },
+            { src: "/images/meet-bubby/meetbubby_section1_2.webp", alt: "Bubby assessing a client", pos: "50% 30%" },
+            { src: "/images/meet-bubby/meetbubby_section1_2b.webp", alt: "Bubby at rest",          pos: "50% 20%" },
+            { src: "/images/meet-bubby/meetbubby_section1_3.webp", alt: "Bubby considering you",  pos: "45% 22%" },
+            { src: "/images/meet-bubby/meetbubby_section1_4.webp", alt: "Bubby in session",       pos: "50% 50%" },
           ]}
           interval={3200}
           sizes="(max-width: 1200px) 100vw, 1200px"

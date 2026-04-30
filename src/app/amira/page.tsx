@@ -26,9 +26,9 @@ export default function MeetUsPage() {
           {/* Photo carousel */}
           <PhotoCarousel
             slides={[
-              { src: "/images/meet-us/meetus_section1.webp", alt: "Bubby and Amira" },
-              { src: "/images/meet-us/meetus_section1_1.webp", alt: "Bubby and Amira" },
-              { src: "/images/meet-us/meetus_section1_2.webp", alt: "Bubby and Amira" },
+              { src: "/images/meet-us/meetus_section1.webp",   alt: "Bubby and Amira", pos: "50% 28%" },
+              { src: "/images/meet-us/meetus_section1_1.webp", alt: "Bubby and Amira", pos: "50% 22%" },
+              { src: "/images/meet-us/meetus_section1_2.webp", alt: "Bubby and Amira", pos: "50% 32%" },
             ]}
             interval={3800}
             sizes="(max-width: 1024px) 100vw, 55vw"
@@ -134,7 +134,7 @@ export default function MeetUsPage() {
                 src="/images/meet-us/meetus_sleeping.webp"
                 alt="Bubby and Amira sleeping"
                 fill
-                className="object-cover"
+                className="object-cover object-[45%_42%]"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>

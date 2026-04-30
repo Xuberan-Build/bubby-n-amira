@@ -69,7 +69,7 @@ export default function AvailablePage() {
               src="/images/shop/shopall_section1.webp"
               alt="Bubby n Amira — Practice Store"
               fill
-              className="object-cover"
+              className="object-cover object-[50%_38%]"
               priority
               sizes="(max-width: 1024px) 100vw, 50vw"
             />

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
-type Slide = { src: string; alt: string };
+type Slide = { src: string; alt: string; pos?: string };
 
 type Props = {
   slides: Slide[];
@@ -27,7 +27,7 @@ export default function PhotoCarousel({ slides, interval = 3500, sizes = '100vw'
           className="absolute inset-0 transition-opacity duration-700"
           style={{ opacity: i === current ? 1 : 0 }}
         >
-          <Image src={slide.src} alt={slide.alt} fill className="object-cover" sizes={sizes} />
+          <Image src={slide.src} alt={slide.alt} fill className="object-cover" style={slide.pos ? { objectPosition: slide.pos } : undefined} sizes={sizes} />
         </div>
       ))}
       <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10">

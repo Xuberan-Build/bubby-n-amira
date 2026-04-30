@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase";
+import { appendRow } from "@/lib/googleSheets";
 
 type ContactPayload = {
   name?: string;
@@ -36,14 +36,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const { error } = await supabaseAdmin.from("contact_submissions").insert({
-    name,
-    email,
-    message,
-  });
-
-  if (error) {
-    console.error("Supabase contact error:", error.message);
+  try {
+    await appendRow("Contact", [
+      new Date().toISOString(),
+      name,
+      email,
+      message,
+    ]);
+  } catch (err) {
+    console.error("Sheets contact error:", err);
     return NextResponse.json(
       { error: "Message could not be sent right now." },
       { status: 502 }

@@ -4,11 +4,11 @@ import Image from 'next/image';
 import Blob from '@/components/ui/Blob';
 
 const slides = [
-  { src: '/images/home/home_section1.webp', pos: '50% 75%' },
-  { src: '/images/home/home_section1_2.webp', pos: '50% 60%' },
-  { src: '/images/home/home_section1_3.webp', pos: '50% 60%' },
-  { src: '/images/home/home_section1_alt1.webp', pos: '50% 50%' },
-  { src: '/images/home/home_section1_alt2.webp', pos: '50% 50%' },
+  { src: '/images/home/home_section1.webp',      pos: '50% 70%' }, // faces lower-center, tilted portrait
+  { src: '/images/home/home_section1_2.webp',    pos: '50% 55%' }, // close-up face, fills frame
+  { src: '/images/home/home_section1_3.webp',    pos: '45% 35%' }, // faces upper-left — pull up
+  { src: '/images/home/home_section1_alt1.webp', pos: '55% 38%' }, // Bubby upper-right, Amira lower-left
+  { src: '/images/home/home_section1_alt2.webp', pos: '50% 40%' }, // both faces upper-center
 ];
 
 export default function HeroCarousel() {
