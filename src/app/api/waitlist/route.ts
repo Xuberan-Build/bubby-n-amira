@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { appendRow } from "@/lib/googleSheets";
 
 type WaitlistPayload = {
   firstName?: string;
@@ -105,16 +104,6 @@ export async function POST(request: Request) {
       { status: 502 }
     );
   }
-
-  // Backup to Google Sheets — fire-and-forget
-  void appendRow("Waitlist", [
-    new Date().toISOString(),
-    firstName,
-    lastName,
-    email,
-    source,
-    pagePath,
-  ]).catch((err) => console.error("Sheets waitlist error:", err));
 
   return NextResponse.json({ ok: true });
 }
