@@ -82,7 +82,7 @@ export default function Home() {
         <div className="page-shell grid grid-cols-2 md:grid-cols-4 divide-x divide-[var(--color-gray-100)]">
           {stats.map((s) => (
             <div key={s.label} className="px-6 py-5 text-center">
-              <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--color-gray-500)] mb-1">
+              <p className="text-[11px] uppercase tracking-[0.14em] text-[var(--color-charcoal)] mb-1 md:text-[10px] md:text-[var(--color-gray-500)] md:tracking-[0.16em]">
                 {s.label}
               </p>
               <p className="font-display text-base font-light">{s.value}</p>

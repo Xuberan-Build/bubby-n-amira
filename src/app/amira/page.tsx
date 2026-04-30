@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import PhotoCarousel from "@/components/ui/PhotoCarousel";
+import Blob from "@/components/ui/Blob";
 
 const socialStats = [
   { stat: "445K", label: "TikTok followers" },
@@ -11,9 +12,16 @@ const socialStats = [
 
 export default function MeetUsPage() {
   return (
-    <div>
+    <div style={{ overflowX: "hidden" }}>
       {/* ── Hero ── */}
-      <section className="page-shell section-pad">
+      <section className="relative page-shell section-pad">
+        <Blob id="amira-hero-r" variant={2} fill="var(--color-pink)"
+          style={{ width: 380, height: 380, top: -60, right: -180, opacity: 0.5 }}
+          className="blob-slow"
+        />
+        <Blob id="amira-hero-l" variant={4} fill="var(--color-lavender)"
+          style={{ width: 300, height: 300, bottom: -80, left: -150, opacity: 0.45 }}
+        />
         <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] lg:grid-cols-[1.1fr_0.9fr]">
           {/* Photo carousel */}
           <PhotoCarousel
@@ -98,7 +106,14 @@ export default function MeetUsPage() {
       </div>
 
       {/* ── Relationship — full-width editorial ── */}
-      <div className="border-t border-[var(--color-gray-100)]">
+      <div className="relative border-t border-[var(--color-gray-100)]">
+        <Blob id="amira-love-r" variant={1} fill="var(--color-mint)"
+          style={{ width: 360, height: 360, top: -60, right: -160, opacity: 0.45 }}
+        />
+        <Blob id="amira-love-l" variant={3} fill="var(--color-peach)"
+          style={{ width: 300, height: 300, bottom: -60, left: -140, opacity: 0.4 }}
+          className="blob-slow"
+        />
         <div className="page-shell py-14">
           <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] md:grid-cols-2">
             <div className="bg-[var(--color-white)] px-10 py-14 flex flex-col justify-center">
@@ -116,8 +131,8 @@ export default function MeetUsPage() {
             </div>
             <div className="relative min-h-[400px] bg-[var(--color-gray-100)]">
               <Image
-                src="/images/meet-us/meetus_section1.webp"
-                alt="Bubby and Amira"
+                src="/images/meet-us/meetus_sleeping.webp"
+                alt="Bubby and Amira sleeping"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"

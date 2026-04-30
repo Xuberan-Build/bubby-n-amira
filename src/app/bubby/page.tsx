@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import PhotoCarousel from "@/components/ui/PhotoCarousel";
+import Blob from "@/components/ui/Blob";
 
 const credentials = [
   { label: "Specialty", value: "Facial Kneading & Purr Therapy" },
@@ -60,9 +61,16 @@ const philosophy = [
 
 export default function BubbyPage() {
   return (
-    <div>
+    <div style={{ overflowX: "hidden" }}>
       {/* ── Bio header ── */}
-      <section className="page-shell section-pad">
+      <section className="relative page-shell section-pad">
+        <Blob id="bubby-hero-r" variant={2} fill="var(--color-lavender)"
+          style={{ width: 400, height: 400, top: -80, right: -180, opacity: 0.5 }}
+          className="blob-slow"
+        />
+        <Blob id="bubby-hero-l" variant={4} fill="var(--color-pink)"
+          style={{ width: 320, height: 320, bottom: -60, left: -160, opacity: 0.45 }}
+        />
         <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] lg:grid-cols-[0.9fr_1.1fr]">
           <div className="relative min-h-[480px] bg-[var(--color-gray-100)]">
             <Image
@@ -117,7 +125,10 @@ export default function BubbyPage() {
       </section>
 
       {/* ── Credentials ── */}
-      <div className="border-t border-[var(--color-gray-100)]">
+      <div className="relative border-t border-[var(--color-gray-100)]">
+        <Blob id="bubby-cred-r" variant={1} fill="var(--color-mint)"
+          style={{ width: 360, height: 360, top: -80, right: -160, opacity: 0.45 }}
+        />
         <div className="page-shell py-14">
           <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-3">
             Credentials &amp; qualifications
@@ -139,7 +150,11 @@ export default function BubbyPage() {
       </div>
 
       {/* ── Practice Philosophy (new) ── */}
-      <div className="border-t border-[var(--color-gray-100)]">
+      <div className="relative border-t border-[var(--color-gray-100)]">
+        <Blob id="bubby-phil-l" variant={3} fill="var(--color-peach)"
+          style={{ width: 340, height: 340, top: -60, left: -160, opacity: 0.45 }}
+          className="blob-slow"
+        />
         <div className="page-shell py-14">
           <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-3">
             Practice philosophy

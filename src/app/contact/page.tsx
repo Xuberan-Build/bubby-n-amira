@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import Blob from "@/components/ui/Blob";
 
 export default function ContactPage() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -27,8 +28,15 @@ export default function ContactPage() {
   }
 
   return (
-    <div>
-      <section className="page-shell section-pad">
+    <div style={{ overflowX: "hidden" }}>
+      <section className="relative page-shell section-pad">
+        <Blob id="contact-r" variant={2} fill="var(--color-lavender)"
+          style={{ width: 380, height: 380, top: -80, right: -180, opacity: 0.5 }}
+          className="blob-slow"
+        />
+        <Blob id="contact-l" variant={4} fill="var(--color-mint)"
+          style={{ width: 300, height: 300, bottom: -60, left: -150, opacity: 0.4 }}
+        />
         <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] lg:grid-cols-2">
 
           {/* ── Practice info + Bubby presence ── */}

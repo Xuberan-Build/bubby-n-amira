@@ -6,6 +6,7 @@ export type WaitlistSource =
   | "homepage-auto"
   | "homepage-cta"
   | "footer-cta"
+  | "waitlist-page"
   | "coming-soon"
   | "manual";
 

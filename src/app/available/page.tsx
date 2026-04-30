@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import WaitlistButton from "@/components/waitlist/WaitlistButton";
+import Blob from "@/components/ui/Blob";
 
 const offerings = [
   {
@@ -39,9 +40,16 @@ const offerings = [
 
 export default function AvailablePage() {
   return (
-    <div>
+    <div style={{ overflowX: "hidden" }}>
       {/* ── Page header ── */}
-      <section className="page-shell section-pad">
+      <section className="relative page-shell section-pad">
+        <Blob id="store-hero-r" variant={2} fill="var(--color-peach)"
+          style={{ width: 400, height: 400, top: -80, right: -180, opacity: 0.5 }}
+        />
+        <Blob id="store-hero-l" variant={1} fill="var(--color-yellow)"
+          style={{ width: 320, height: 320, bottom: -60, left: -160, opacity: 0.45 }}
+          className="blob-slow"
+        />
         <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] lg:grid-cols-[1fr_1fr]">
           <div className="bg-[var(--color-white)] px-10 py-14 flex flex-col justify-center">
             <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-3">

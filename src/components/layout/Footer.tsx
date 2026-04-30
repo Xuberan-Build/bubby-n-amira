@@ -24,7 +24,7 @@ const socials = [
   },
   {
     label: "Facebook",
-    href: "https://facebook.com/bubbynamira",
+    href: "https://www.facebook.com/profile.php?id=61578905001247",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.026 4.388 11.021 10.125 11.927v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.969H15.83c-1.491 0-1.956.929-1.956 1.874v2.282h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.099 24 12.073z" />
@@ -77,7 +77,7 @@ export default function Footer() {
               bubby will notify you when he feels like it.
             </p>
             <WaitlistButton source="footer-cta">
-              sure i like you, add me
+              join his waitlist
             </WaitlistButton>
           </div>
         </div>

@@ -42,10 +42,10 @@ export default function HeroVideo({ fallbackSrc = '/images/home/home_section1.we
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
 
       <div className="absolute bottom-0 left-0 right-0 page-shell pb-10 pt-0 z-10">
-        <p className="text-xs uppercase tracking-[0.18em] text-white/70 mb-2">
+        <p className="text-xs uppercase tracking-[0.18em] text-white/70 mb-2 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)]">
           Bubby&apos;s Health &amp; Wellness Practice
         </p>
-        <h1 className="font-display text-4xl font-light leading-snug text-white md:text-5xl">
+        <h1 className="font-display text-4xl font-light leading-snug text-white md:text-5xl [text-shadow:0_2px_14px_rgba(0,0,0,0.55)]">
           Accepting new clients.<br />He will decide if you qualify.
         </h1>
       </div>
