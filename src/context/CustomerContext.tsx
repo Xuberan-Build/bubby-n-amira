@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import type { ShopifyCustomer } from "@/lib/shopify";
+import { klaviyoIdentify } from "@/lib/klaviyo";
 
 type CustomerContextType = {
   customer: ShopifyCustomer | null;
@@ -27,7 +28,12 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     fetch("/api/customer/me")
       .then((r) => r.json())
-      .then(({ customer }) => setCustomer(customer))
+      .then(({ customer }) => {
+        setCustomer(customer);
+        if (customer) {
+          klaviyoIdentify({ email: customer.email, first_name: customer.firstName ?? undefined, last_name: customer.lastName ?? undefined });
+        }
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -41,6 +47,9 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     if (!res.ok) return data.error as string;
     const me = await fetch("/api/customer/me").then((r) => r.json());
     setCustomer(me.customer);
+    if (me.customer) {
+      klaviyoIdentify({ email: me.customer.email, first_name: me.customer.firstName ?? undefined, last_name: me.customer.lastName ?? undefined });
+    }
     return null;
   }, []);
 
@@ -59,6 +68,9 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     if (!res.ok) return data.error as string;
     const me = await fetch("/api/customer/me").then((r) => r.json());
     setCustomer(me.customer);
+    if (me.customer) {
+      klaviyoIdentify({ email: me.customer.email, first_name: me.customer.firstName ?? undefined, last_name: me.customer.lastName ?? undefined });
+    }
     return null;
   }, []);
 

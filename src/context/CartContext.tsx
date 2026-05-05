@@ -16,6 +16,7 @@ import {
   updateCartLine,
   type ShopifyCart,
 } from "@/lib/shopify";
+import { klaviyoTrack } from "@/lib/klaviyo";
 
 type CartContextType = {
   cart: ShopifyCart | null;
@@ -59,6 +60,29 @@ export function CartProvider({ children }: { children: ReactNode }) {
         localStorage.setItem(CART_ID_KEY, updated.id);
       }
       setCart(updated);
+      const addedLine = updated.lines.edges.find(
+        (e) => e.node.merchandise.id === variantId
+      )?.node;
+      if (addedLine) {
+        klaviyoTrack("Added to Cart", {
+          $value: parseFloat(addedLine.merchandise.price.amount) * quantity,
+          AddedItemProductName: addedLine.merchandise.product.title,
+          AddedItemVariantName: addedLine.merchandise.title,
+          AddedItemPrice: parseFloat(addedLine.merchandise.price.amount),
+          AddedItemQuantity: quantity,
+          AddedItemURL: `${window.location.origin}/products/${addedLine.merchandise.product.handle}`,
+          AddedItemImageURL: addedLine.merchandise.image?.url ?? "",
+          CheckoutURL: updated.checkoutUrl,
+          Items: updated.lines.edges.map((e) => ({
+            ProductName: e.node.merchandise.product.title,
+            Quantity: e.node.quantity,
+            ItemPrice: parseFloat(e.node.merchandise.price.amount),
+            RowTotal: parseFloat(e.node.merchandise.price.amount) * e.node.quantity,
+            ProductURL: `${window.location.origin}/products/${e.node.merchandise.product.handle}`,
+            ImageURL: e.node.merchandise.image?.url ?? "",
+          })),
+        });
+      }
     } finally {
       setIsLoading(false);
     }

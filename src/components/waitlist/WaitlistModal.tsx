@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { klaviyoIdentify } from "@/lib/klaviyo";
 
 export type WaitlistSource =
   | "homepage-auto"
@@ -101,6 +102,7 @@ export default function WaitlistModal({
 
       setSubmitted(true);
       onSubmitted();
+      klaviyoIdentify({ email, first_name: firstName, last_name: lastName });
       setFirstName("");
       setLastName("");
       setEmail("");

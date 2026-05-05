@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins, Work_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
@@ -34,6 +35,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${displayFont.variable} ${bodyFont.variable} antialiased`}>
+        <Script
+          src={`https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=${process.env.NEXT_PUBLIC_KLAVIYO_COMPANY_ID}`}
+          strategy="afterInteractive"
+        />
         <CustomerProvider>
         <CartProvider>
           <WaitlistProvider>
