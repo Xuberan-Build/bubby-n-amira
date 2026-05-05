@@ -55,7 +55,7 @@ const products = [
     imagePos: "60% 50%",
   },
   {
-    name: "The Wall Brush",
+    name: "The Grooming Brush",
     role: "Grooming station — professional",
     note: "Installed without notice.",
     href: "/product/wall-brush",

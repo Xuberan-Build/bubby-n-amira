@@ -6,7 +6,7 @@ import WaitlistButton from "@/components/waitlist/WaitlistButton";
 import { getProductByHandle, formatPrice } from "@/lib/shopify";
 
 const localImages: Record<string, string[]> = {
-  "wall-brush": ["/images/products/thewallbrush1.webp"],
+  "wall-brush": ["/images/products/thewallbrush2.webp"],
   "bubby-blanket": [
     "/images/products/bubbyblanket1.webp",
     "/images/products/bubbyblanket2.webp",
@@ -27,9 +27,9 @@ const supplementary: Record<
 > = {
   "wall-brush": {
     tagline: "Practice Equipment",
-    materials: "Natural bristles, wooden handle",
-    care: "Wipe clean with a damp cloth",
-    specs: ["Natural bristles", "Wooden handle", "Cat-tested"],
+    materials: "Self-cleaning bristles, cream finish",
+    care: "Press button to release fur. Wipe clean.",
+    specs: ["Self-cleaning button", "Steel bristles", "Cat-tested"],
     shipping: "Ships in 3–7 business days.",
   },
   "bubby-blanket": {
@@ -56,7 +56,7 @@ const supplementary: Record<
 };
 
 const alsoLikes = [
-  { name: "The Wall Brush", href: "/product/wall-brush" },
+  { name: "The Grooming Brush", href: "/product/wall-brush" },
   { name: "The Bubby Blanket", href: "/product/bubby-blanket" },
   { name: "The Sticker Sheet", href: "/product/sticker-sheet" },
   { name: "The Bubby Tee", href: "/product/bubby-tee" },
@@ -83,10 +83,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const variants = product.variants.edges.map((e) => e.node);
   const shopifyImages = product.images.edges.map((e) => e.node);
   const fallbacks = localImages[handle] ?? [];
+  const localSupplements = fallbacks.map((src) => ({ url: src, altText: null }));
   const images =
     shopifyImages.length > 0
-      ? shopifyImages
-      : fallbacks.map((src) => ({ url: src, altText: null }));
+      ? [...shopifyImages, ...localSupplements]
+      : localSupplements;
   const available = variants.some((v) => v.availableForSale);
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
