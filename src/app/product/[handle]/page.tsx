@@ -66,9 +66,14 @@ type ProductPageProps = {
   params: { handle: string } | Promise<{ handle: string }>;
 };
 
+const shopifyHandleAliases: Record<string, string> = {
+  "bubby-tee": "unisex-garment-dyed-t-shirt",
+};
+
 export default async function ProductPage({ params }: ProductPageProps) {
   const { handle } = await Promise.resolve(params);
-  const product = await getProductByHandle(handle);
+  const shopifyHandle = shopifyHandleAliases[handle] ?? handle;
+  const product = await getProductByHandle(shopifyHandle);
 
   if (!product) notFound();
 
