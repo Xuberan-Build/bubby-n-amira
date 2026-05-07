@@ -48,9 +48,9 @@ const supplementary: Record<
   },
   "bubby-tee": {
     tagline: "Practice Equipment",
-    materials: "100% cotton, pre-shrunk",
-    care: "Machine wash cold, tumble dry low",
-    specs: ["100% cotton", "Pre-shrunk", "Machine wash cold", "Unisex fit"],
+    materials: "100% ring-spun cotton, garment-dyed",
+    care: "Machine wash cold inside out, tumble dry low",
+    specs: ["100% ring-spun cotton", "Garment-dyed finish", "Relaxed unisex fit", "Machine wash cold"],
     shipping: "Made for you when you order. Ships in 5–10 business days.",
   },
 };
