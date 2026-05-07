@@ -6,7 +6,7 @@ import WaitlistButton from "@/components/waitlist/WaitlistButton";
 import { getProductByHandle, formatPrice } from "@/lib/shopify";
 
 const localImages: Record<string, string[]> = {
-  "wall-brush": ["/images/products/thewallbrush2.webp"],
+  "grooming-brush": ["/images/products/thewallbrush2.webp"],
   "bubby-blanket": [
     "/images/products/bubbyblanket1.webp",
     "/images/products/bubbyblanket2.webp",
@@ -25,7 +25,7 @@ const supplementary: Record<
     shipping: string;
   }
 > = {
-  "wall-brush": {
+  "grooming-brush": {
     tagline: "Practice Equipment",
     materials: "Self-cleaning bristles, cream finish",
     care: "Press button to release fur. Wipe clean.",
@@ -56,7 +56,7 @@ const supplementary: Record<
 };
 
 const alsoLikes = [
-  { name: "The Grooming Brush", href: "/product/wall-brush" },
+  { name: "The Grooming Brush", href: "/product/grooming-brush" },
   { name: "The Bubby Blanket", href: "/product/bubby-blanket" },
   { name: "The Sticker Sheet", href: "/product/sticker-sheet" },
   { name: "The Bubby Tee", href: "/product/bubby-tee" },

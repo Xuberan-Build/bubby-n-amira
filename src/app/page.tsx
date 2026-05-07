@@ -58,7 +58,7 @@ const products = [
     name: "The Grooming Brush",
     role: "Grooming station — professional",
     note: "Installed without notice.",
-    href: "/product/wall-brush",
+    href: "/product/grooming-brush",
     image: "/images/products/thewallbrush1.webp",
     imagePos: "50% 35%",
   },
