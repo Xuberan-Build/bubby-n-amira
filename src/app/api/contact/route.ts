@@ -14,58 +14,118 @@ function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-const KLAVIYO_HEADERS = (key: string) => ({
-  accept: "application/vnd.api+json",
-  revision: "2024-07-15",
-  "content-type": "application/vnd.api+json",
-  Authorization: `Klaviyo-API-Key ${key}`,
-});
+const KLAVIYO_BASE = "https://a.klaviyo.com/api";
+const REVISION = "2024-07-15";
 
-async function subscribeToContactList(email: string, name: string, privateKey: string): Promise<boolean> {
+function klaviyoHeaders(key: string) {
+  return {
+    "Content-Type": "application/vnd.api+json",
+    Authorization: `Klaviyo-API-Key ${key}`,
+    revision: REVISION,
+  };
+}
+
+async function subscribeToContactList(
+  email: string,
+  name: string,
+  privateKey: string,
+): Promise<boolean> {
   const listId = process.env.KLAVIYO_CONTACT_LIST_ID;
   if (!listId) return false;
 
-  const res = await fetch("https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/", {
-    method: "POST",
-    headers: KLAVIYO_HEADERS(privateKey),
-    body: JSON.stringify({
-      data: {
-        type: "profile-subscription-bulk-create-job",
-        attributes: {
-          list_id: listId,
-          subscriptions: [
-            {
-              channels: { email: { subscriptions: [{ type: "MARKETING" }] } },
-              profile: {
-                data: {
+  const res = await fetch(
+    `${KLAVIYO_BASE}/profile-subscription-bulk-create-jobs/`,
+    {
+      method: "POST",
+      headers: klaviyoHeaders(privateKey),
+      body: JSON.stringify({
+        data: {
+          type: "profile-subscription-bulk-create-job",
+          attributes: {
+            profiles: {
+              data: [
+                {
                   type: "profile",
                   attributes: {
                     email,
-                    properties: { contact_name: name },
+                    subscriptions: {
+                      email: { marketing: { consent: "SUBSCRIBED" } },
+                    },
                   },
                 },
-              },
+              ],
             },
-          ],
+          },
+          relationships: {
+            list: { data: { type: "list", id: listId } },
+          },
+        },
+      }),
+    },
+  );
+
+  if (res.status !== 202) return false;
+
+  // Upsert profile with contact name as a property
+  const createRes = await fetch(`${KLAVIYO_BASE}/profiles/`, {
+    method: "POST",
+    headers: klaviyoHeaders(privateKey),
+    body: JSON.stringify({
+      data: {
+        type: "profile",
+        attributes: {
+          email,
+          properties: { contact_name: name },
         },
       },
     }),
   });
 
-  return res.ok;
+  if (createRes.status === 409) {
+    const conflict = (await createRes.json()) as {
+      errors?: { meta?: { duplicate_profile_id?: string } }[];
+    };
+    const profileId = conflict.errors?.[0]?.meta?.duplicate_profile_id;
+    if (profileId) {
+      await fetch(`${KLAVIYO_BASE}/profiles/${profileId}/`, {
+        method: "PATCH",
+        headers: klaviyoHeaders(privateKey),
+        body: JSON.stringify({
+          data: {
+            type: "profile",
+            id: profileId,
+            attributes: {
+              email,
+              properties: { contact_name: name },
+            },
+          },
+        }),
+      });
+    }
+  }
+
+  return true;
 }
 
-async function trackContactEvent(email: string, name: string, message: string, privateKey: string): Promise<void> {
-  await fetch("https://a.klaviyo.com/api/events/", {
+async function trackContactEvent(
+  email: string,
+  name: string,
+  message: string,
+  privateKey: string,
+): Promise<void> {
+  await fetch(`${KLAVIYO_BASE}/events/`, {
     method: "POST",
-    headers: KLAVIYO_HEADERS(privateKey),
+    headers: klaviyoHeaders(privateKey),
     body: JSON.stringify({
       data: {
         type: "event",
         attributes: {
           properties: { message, contact_name: name },
           metric: {
-            data: { type: "metric", attributes: { name: "Contact Form Submitted" } },
+            data: {
+              type: "metric",
+              attributes: { name: "Contact Form Submitted" },
+            },
           },
           profile: {
             data: { type: "profile", attributes: { email } },
@@ -86,20 +146,23 @@ export async function POST(request: Request) {
   if (!name || !email || !message) {
     return NextResponse.json(
       { error: "Name, email, and message are required." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (!isValidEmail(email)) {
     return NextResponse.json(
       { error: "Please enter a valid email address." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   const privateKey = process.env.KLAVIYO_PRIVATE_KEY;
   if (!privateKey) {
-    return NextResponse.json({ error: "Message could not be sent right now." }, { status: 502 });
+    return NextResponse.json(
+      { error: "Message could not be sent right now." },
+      { status: 502 },
+    );
   }
 
   const ok = await subscribeToContactList(email, name, privateKey);
@@ -107,11 +170,10 @@ export async function POST(request: Request) {
   if (!ok) {
     return NextResponse.json(
       { error: "Message could not be sent right now." },
-      { status: 502 }
+      { status: 502 },
     );
   }
 
-  // Fire-and-forget event for timeline + future metric-based flows
   void trackContactEvent(email, name, message, privateKey);
 
   return NextResponse.json({ ok: true });

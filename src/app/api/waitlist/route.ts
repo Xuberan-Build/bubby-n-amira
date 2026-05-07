@@ -16,60 +16,89 @@ function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-async function subscribeToKlaviyo(
-  email: string,
-  firstName: string,
-  lastName: string,
-  source: string,
-): Promise<boolean> {
-  const privateKey = process.env.KLAVIYO_PRIVATE_KEY;
-  const listId = process.env.KLAVIYO_LIST_ID;
-  if (!privateKey || !listId) return false;
+const KLAVIYO_BASE = "https://a.klaviyo.com/api";
+const REVISION = "2024-07-15";
 
-  try {
-    const res = await fetch(
-      "https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/",
-      {
-        method: "POST",
-        headers: {
-          accept: "application/vnd.api+json",
-          revision: "2024-07-15",
-          "content-type": "application/vnd.api+json",
-          Authorization: `Klaviyo-API-Key ${privateKey}`,
-        },
-        body: JSON.stringify({
-          data: {
-            type: "profile-subscription-bulk-create-job",
-            attributes: {
-              list_id: listId,
-              subscriptions: [
+function klaviyoHeaders(privateKey: string) {
+  return {
+    "Content-Type": "application/vnd.api+json",
+    Authorization: `Klaviyo-API-Key ${privateKey}`,
+    revision: REVISION,
+  };
+}
+
+async function subscribeEmailToList(
+  privateKey: string,
+  listId: string,
+  email: string,
+): Promise<boolean> {
+  const res = await fetch(
+    `${KLAVIYO_BASE}/profile-subscription-bulk-create-jobs/`,
+    {
+      method: "POST",
+      headers: klaviyoHeaders(privateKey),
+      body: JSON.stringify({
+        data: {
+          type: "profile-subscription-bulk-create-job",
+          attributes: {
+            profiles: {
+              data: [
                 {
-                  channels: {
-                    email: { subscriptions: [{ type: "MARKETING" }] },
-                  },
-                  profile: {
-                    data: {
-                      type: "profile",
-                      attributes: {
-                        email,
-                        first_name: firstName,
-                        last_name: lastName,
-                        properties: { signup_source: source },
-                      },
+                  type: "profile",
+                  attributes: {
+                    email,
+                    subscriptions: {
+                      email: { marketing: { consent: "SUBSCRIBED" } },
                     },
                   },
                 },
               ],
             },
           },
-        }),
-      },
-    );
+          relationships: {
+            list: { data: { type: "list", id: listId } },
+          },
+        },
+      }),
+    },
+  );
+  return res.status === 202;
+}
 
-    return res.ok;
-  } catch (err) {
-    console.error("Klaviyo subscribe error:", err);
-    return false;
+async function upsertProfile(
+  privateKey: string,
+  email: string,
+  firstName: string,
+  lastName: string,
+  source: string,
+): Promise<void> {
+  const attributes = {
+    email,
+    first_name: firstName,
+    last_name: lastName,
+    properties: { signup_source: source },
+  };
+
+  const createRes = await fetch(`${KLAVIYO_BASE}/profiles/`, {
+    method: "POST",
+    headers: klaviyoHeaders(privateKey),
+    body: JSON.stringify({ data: { type: "profile", attributes } }),
+  });
+
+  if (createRes.status === 409) {
+    const conflict = (await createRes.json()) as {
+      errors?: { meta?: { duplicate_profile_id?: string } }[];
+    };
+    const profileId = conflict.errors?.[0]?.meta?.duplicate_profile_id;
+    if (!profileId) return;
+
+    await fetch(`${KLAVIYO_BASE}/profiles/${profileId}/`, {
+      method: "PATCH",
+      headers: klaviyoHeaders(privateKey),
+      body: JSON.stringify({
+        data: { type: "profile", id: profileId, attributes },
+      }),
+    });
   }
 }
 
@@ -80,30 +109,41 @@ export async function POST(request: Request) {
   const lastName = normalizeString(body.lastName);
   const email = normalizeString(body.email).toLowerCase();
   const source = normalizeString(body.source) || "manual";
-  const pagePath = normalizeString(body.pagePath) || "/";
 
   if (!firstName || !lastName || !email) {
     return NextResponse.json(
       { error: "First name, last name, and email are required." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (!isValidEmail(email)) {
     return NextResponse.json(
       { error: "Please enter a valid email address." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
-  const ok = await subscribeToKlaviyo(email, firstName, lastName, source);
+  const privateKey = process.env.KLAVIYO_PRIVATE_KEY;
+  const listId = process.env.KLAVIYO_LIST_ID;
 
-  if (!ok) {
+  if (!privateKey || !listId) {
     return NextResponse.json(
       { error: "Waitlist signup is unavailable right now." },
-      { status: 502 }
+      { status: 502 },
     );
   }
+
+  const subscribed = await subscribeEmailToList(privateKey, listId, email);
+
+  if (!subscribed) {
+    return NextResponse.json(
+      { error: "Waitlist signup is unavailable right now." },
+      { status: 502 },
+    );
+  }
+
+  await upsertProfile(privateKey, email, firstName, lastName, source);
 
   return NextResponse.json({ ok: true });
 }
