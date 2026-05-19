@@ -4,91 +4,30 @@ import Link from "next/link";
 import AddToCart from "@/components/product/AddToCart";
 import WaitlistButton from "@/components/waitlist/WaitlistButton";
 import { getProductByHandle, formatPrice } from "@/lib/shopify";
-
-const localImages: Record<string, string[]> = {
-  "grooming-brush": ["/images/products/thewallbrush2.webp"],
-  "bubby-blanket": [
-    "/images/products/bubbyblanket1.webp",
-    "/images/products/bubbyblanket2.webp",
-  ],
-  "bubby-tee": ["/images/products/bubbytshirt.webp"],
-  "sticker-sheet": [],
-};
-
-const supplementary: Record<
-  string,
-  {
-    tagline: string;
-    materials: string;
-    care: string;
-    specs: string[];
-    shipping: string;
-  }
-> = {
-  "grooming-brush": {
-    tagline: "Practice Equipment",
-    materials: "Self-cleaning bristles, cream finish",
-    care: "Press button to release fur. Wipe clean.",
-    specs: ["Self-cleaning button", "Steel bristles", "Cat-tested"],
-    shipping: "Ships in 3–7 business days.",
-  },
-  "bubby-blanket": {
-    tagline: "Practice Equipment",
-    materials: "Soft fleece blend",
-    care: "Machine wash cold, tumble dry low",
-    specs: ["Fleece blend", "Generous size", "Cat-approved warmth"],
-    shipping: "Ships in 3–7 business days.",
-  },
-  "sticker-sheet": {
-    tagline: "Coming Soon",
-    materials: "Matte vinyl",
-    care: "Weather resistant",
-    specs: ["Matte finish", "Weather resistant", "Multiple stickers per sheet"],
-    shipping: "Available soon.",
-  },
-  "bubby-tee": {
-    tagline: "Practice Equipment",
-    materials: "100% ring-spun cotton, garment-dyed",
-    care: "Machine wash cold inside out, tumble dry low",
-    specs: ["100% ring-spun cotton", "Garment-dyed finish", "Relaxed unisex fit", "Machine wash cold"],
-    shipping: "Made for you when you order. Ships in 5–10 business days.",
-  },
-};
-
-const alsoLikes = [
-  { name: "The Grooming Brush", href: "/product/grooming-brush" },
-  { name: "The Bubby Blanket", href: "/product/bubby-blanket" },
-  { name: "The Sticker Sheet", href: "/product/sticker-sheet" },
-  { name: "The Bubby Tee", href: "/product/bubby-tee" },
-];
+import { products as catalog, getProduct, getShopifyHandle, getLocalImages } from "@/lib/products";
 
 type ProductPageProps = {
   params: { handle: string } | Promise<{ handle: string }>;
 };
 
-const shopifyHandleAliases: Record<string, string> = {
-  "bubby-tee": "unisex-garment-dyed-t-shirt",
-};
-
 export default async function ProductPage({ params }: ProductPageProps) {
   const { handle } = await Promise.resolve(params);
-  const shopifyHandle = shopifyHandleAliases[handle] ?? handle;
-  const product = await getProductByHandle(shopifyHandle);
+  const product = await getProductByHandle(getShopifyHandle(handle));
 
   if (!product) notFound();
 
-  const extra = supplementary[handle] ?? {
-    tagline: "Practice Equipment",
-    materials: "—",
-    care: "—",
-    specs: [],
-    shipping: "Ships in 3–7 business days.",
+  const meta = getProduct(handle);
+  const extra = {
+    tagline: meta?.tagline ?? "Practice Equipment",
+    materials: meta?.materials ?? "—",
+    care: meta?.care ?? "—",
+    specs: meta?.specs ?? [],
+    shipping: meta?.shipping ?? "Ships in 3–7 business days.",
   };
 
   const variants = product.variants.edges.map((e) => e.node);
   const shopifyImages = product.images.edges.map((e) => e.node);
-  const fallbacks = localImages[handle] ?? [];
-  const localSupplements = fallbacks.map((src) => ({ url: src, altText: null }));
+  const localSupplements = getLocalImages(handle).map((src) => ({ url: src, altText: null }));
   const images =
     shopifyImages.length > 0
       ? [...shopifyImages, ...localSupplements]
@@ -99,8 +38,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
     product.priceRange.minVariantPrice.currencyCode
   );
 
-  const otherProducts = alsoLikes
-    .filter((p) => p.href !== `/product/${handle}`)
+  const otherProducts = catalog
+    .filter((p) => p.handle !== handle)
     .slice(0, 3);
 
   return (

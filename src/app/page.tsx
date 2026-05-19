@@ -4,6 +4,7 @@ import WaitlistButton from "@/components/waitlist/WaitlistButton";
 import PhotoCarousel from "@/components/ui/PhotoCarousel";
 import HeroVideo from "@/components/ui/HeroVideo";
 import Blob from "@/components/ui/Blob";
+import { products as catalog } from "@/lib/products";
 
 const stats = [
   { label: "Established", value: "Without notice" },
@@ -45,32 +46,8 @@ const services = [
   },
 ];
 
-const products = [
-  {
-    name: "The Bubby Blanket",
-    role: "Kneading blanket — official",
-    note: "He selected this. You did not.",
-    href: "/product/bubby-blanket",
-    image: "/images/products/bubbyblanket1.webp",
-    imagePos: "60% 50%",
-  },
-  {
-    name: "The Grooming Brush",
-    role: "Grooming station — professional",
-    note: "Installed without notice.",
-    href: "/product/grooming-brush",
-    image: "/images/products/thewallbrush1.webp",
-    imagePos: "50% 35%",
-  },
-  {
-    name: "The Sticker Sheet",
-    role: "Practice certifications — issued by Bubby",
-    note: "Display yours accordingly.",
-    href: "/product/sticker-sheet",
-    image: null,
-    imagePos: undefined,
-  },
-];
+const homeProducts = ["bubby-blanket", "grooming-brush", "sticker-sheet"]
+  .map((h) => catalog.find((p) => p.handle === h)!);
 
 export default function Home() {
   return (
@@ -231,12 +208,12 @@ export default function Home() {
             Official practice equipment.<br />Approved by Bubby.
           </h2>
           <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] md:grid-cols-3">
-            {products.map((p) => (
+            {homeProducts.map((p) => (
               <div key={p.name} className="bg-[var(--color-white)] flex flex-col">
                 <div className="relative h-44 bg-[var(--color-gray-100)]">
-                  {p.image ? (
+                  {p.images[0] ? (
                     <Image
-                      src={p.image}
+                      src={p.images[0]}
                       alt={p.name}
                       fill
                       className="object-cover"

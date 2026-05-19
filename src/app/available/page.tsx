@@ -2,41 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import WaitlistButton from "@/components/waitlist/WaitlistButton";
 import Blob from "@/components/ui/Blob";
-
-const offerings = [
-  {
-    name: "The Grooming Brush",
-    role: "Grooming Station — Professional Grade",
-    detail: "Bubby's actual grooming brush. The one that started this. Installed without notice. Results speak for themselves.",
-    href: "/product/grooming-brush",
-    status: "available",
-    image: "/images/products/thewallbrush2.webp",
-  },
-  {
-    name: "The Bubby Blanket",
-    role: "Treatment Table — Official",
-    detail: "Soft. He approves. That's the whole review. He selected this. You did not. It is available to you anyway.",
-    href: "/product/bubby-blanket",
-    status: "available",
-    image: "/images/products/bubbyblanket1.webp",
-  },
-  {
-    name: "The Bubby Tee",
-    role: "Practice Apparel — Client-Issued",
-    detail: "100% cotton. Made for you when you order. Pre-shrunk. Bubby on it. Wear it accordingly.",
-    href: "/product/bubby-tee",
-    status: "available",
-    image: "/images/products/bubbytshirt.webp",
-  },
-  {
-    name: "The Sticker Sheet",
-    role: "Practice Certifications — Issued by Bubby",
-    detail: "Artist being sourced. Display yours when available. Eligibility is assumed if you are reading this.",
-    href: "/product/sticker-sheet",
-    status: "coming-soon",
-    image: null,
-  },
-];
+import { products as catalog } from "@/lib/products";
 
 export default function AvailablePage() {
   return (
@@ -81,12 +47,12 @@ export default function AvailablePage() {
       <div className="border-t border-[var(--color-gray-100)]">
         <div className="page-shell py-14">
           <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] md:grid-cols-2">
-            {offerings.map((item) => (
-              <div key={item.name} className="bg-[var(--color-white)] flex flex-col relative group cursor-pointer">
+            {catalog.map((item) => (
+              <div key={item.handle} className="bg-[var(--color-white)] flex flex-col relative group cursor-pointer">
                 <div className="relative h-64 bg-[var(--color-gray-100)]">
-                  {item.image && (
+                  {item.images[0] && (
                     <Image
-                      src={item.image}
+                      src={item.images[0]}
                       alt={item.name}
                       fill
                       className="object-cover"
