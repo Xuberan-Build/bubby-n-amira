@@ -5,12 +5,12 @@ import Blob from "@/components/ui/Blob";
 
 const offerings = [
   {
-    name: "The Wall Brush",
+    name: "The Grooming Brush",
     role: "Grooming Station — Professional Grade",
-    detail: "Bubby's actual wall brush. The one that started this. Installed without notice. Results speak for themselves.",
-    href: "/product/wall-brush",
+    detail: "Bubby's actual grooming brush. The one that started this. Installed without notice. Results speak for themselves.",
+    href: "/product/grooming-brush",
     status: "available",
-    image: "/images/products/thewallbrush1.webp",
+    image: "/images/products/thewallbrush2.webp",
   },
   {
     name: "The Bubby Blanket",
@@ -82,7 +82,7 @@ export default function AvailablePage() {
         <div className="page-shell py-14">
           <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] md:grid-cols-2">
             {offerings.map((item) => (
-              <div key={item.name} className="bg-[var(--color-white)] flex flex-col">
+              <div key={item.name} className="bg-[var(--color-white)] flex flex-col relative group cursor-pointer">
                 <div className="relative h-64 bg-[var(--color-gray-100)]">
                   {item.image && (
                     <Image
@@ -112,14 +112,18 @@ export default function AvailablePage() {
                   <div className="flex items-center gap-6">
                     <Link
                       href={item.href}
-                      className="text-[10px] uppercase tracking-[0.14em] text-[var(--color-gray-500)] link-underline"
-                    >
+                      className="absolute inset-0 z-[1]"
+                      aria-label={`View details for ${item.name}`}
+                    />
+                    <span className="relative z-[2] text-[10px] uppercase tracking-[0.14em] text-[var(--color-gray-500)] link-underline pointer-events-none">
                       View details →
-                    </Link>
+                    </span>
                     {item.status === "coming-soon" && (
-                      <WaitlistButton source="coming-soon" variant="secondary">
-                        notify me
-                      </WaitlistButton>
+                      <span className="relative z-[2]">
+                        <WaitlistButton source="coming-soon" variant="secondary">
+                          notify me
+                        </WaitlistButton>
+                      </span>
                     )}
                   </div>
                 </div>
