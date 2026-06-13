@@ -1,0 +1,24 @@
+name: Production health check
+
+# Silent-failure monitor for the live storefront. A "Ready" Vercel deploy can
+# still break at request time (Shopify unpublish → 404, handle drift → 404,
+# API error → 500, sold out → buy button silently becomes the waitlist CTA).
+# This asserts the rendered pages and fails the run on regression — GitHub
+# emails the repo owner on a failed scheduled run.
+
+on:
+  schedule:
+    - cron: "0 */6 * * *" # every 6 hours (00:00, 06:00, 12:00, 18:00 UTC)
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+jobs:
+  healthcheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run health check
+        run: node scripts/healthcheck.mjs
