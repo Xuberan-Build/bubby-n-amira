@@ -203,6 +203,29 @@ a {
   }
 }
 
+/* Shopify product description (descriptionHtml) — preserve paragraphs, lists, emphasis */
+.product-rte > * + * {
+  margin-top: 0.85em;
+}
+
+.product-rte ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.product-rte li + li {
+  margin-top: 0.25em;
+}
+
+.product-rte strong {
+  color: var(--color-charcoal);
+  font-weight: 600;
+}
+
+.product-rte em {
+  font-style: italic;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .blob,
   .fade-up,

@@ -90,9 +90,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <h1 className="font-display text-4xl font-light leading-snug mb-5">
                 {product.title}
               </h1>
-              <p className="text-base leading-relaxed text-[var(--color-gray-500)]">
-                {product.description}
-              </p>
+              {product.descriptionHtml ? (
+                <div
+                  className="product-rte text-base leading-relaxed text-[var(--color-gray-500)]"
+                  dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+                />
+              ) : (
+                <p className="text-base leading-relaxed text-[var(--color-gray-500)]">
+                  {product.description}
+                </p>
+              )}
             </div>
 
             {/* CTA */}

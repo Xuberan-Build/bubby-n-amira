@@ -66,6 +66,7 @@ export type ShopifyProduct = {
   id: string;
   title: string;
   description: string;
+  descriptionHtml: string;
   tags: string[];
   priceRange: { minVariantPrice: { amount: string; currencyCode: string } };
   options: { name: string; values: string[] }[];
@@ -131,7 +132,7 @@ export async function getProductByHandle(
   const query = `
     query getProduct($handle: String!) {
       product(handle: $handle) {
-        id title description tags
+        id title description descriptionHtml tags
         priceRange { minVariantPrice { amount currencyCode } }
         options { name values }
         variants(first: 100) {
