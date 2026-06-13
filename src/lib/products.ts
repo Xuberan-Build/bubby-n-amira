@@ -116,3 +116,8 @@ export function getShopifyHandle(handle: string): string {
 export function getLocalImages(handle: string): string[] {
   return getProduct(handle)?.images ?? [];
 }
+
+export function shopifyOnlineStoreUrl(shopifyHandle: string): string {
+  const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
+  return `https://${domain}/products/${shopifyHandle}`;
+}

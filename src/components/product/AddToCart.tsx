@@ -34,6 +34,12 @@ export default function AddToCart({ variants, options }: AddToCartProps) {
 
   const variant = findVariant(variants, selected);
   const available = variant?.availableForSale ?? false;
+  const selectedPrice = variant
+    ? new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: variant.price.currencyCode,
+      }).format(parseFloat(variant.price.amount))
+    : "";
 
   async function handleAddToCart() {
     if (!variant || !available) return;
@@ -43,6 +49,7 @@ export default function AddToCart({ variants, options }: AddToCartProps) {
   }
 
   return (
+    <>
     <div className="grid gap-4">
       {options.map((opt) =>
         opt.values.length > 1 ? (
@@ -101,5 +108,14 @@ export default function AddToCart({ variants, options }: AddToCartProps) {
         </Button>
       </div>
     </div>
+
+      {/* Sticky mobile buy bar — keeps the buy action above the fold on phones */}
+      <div className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-between gap-3 border-t border-[var(--color-gray-100)] bg-[var(--color-white)]/95 px-4 py-3 backdrop-blur-sm lg:hidden">
+        <span className="font-display text-lg font-light">{selectedPrice}</span>
+        <Button onClick={handleAddToCart} disabled={!available || isLoading}>
+          {isLoading ? "Adding…" : added ? "Added!" : "Get One"}
+        </Button>
+      </div>
+    </>
   );
 }

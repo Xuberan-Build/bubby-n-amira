@@ -1,10 +1,17 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import AddToCart from "@/components/product/AddToCart";
+import ProductGallery from "@/components/product/ProductGallery";
+import ProductUnavailable from "@/components/product/ProductUnavailable";
 import WaitlistButton from "@/components/waitlist/WaitlistButton";
 import { getProductByHandle, formatPrice } from "@/lib/shopify";
-import { products as catalog, getProduct, getShopifyHandle, getLocalImages } from "@/lib/products";
+import {
+  products as catalog,
+  getProduct,
+  getShopifyHandle,
+  getLocalImages,
+  shopifyOnlineStoreUrl,
+} from "@/lib/products";
 
 type ProductPageProps = {
   params: { handle: string } | Promise<{ handle: string }>;
@@ -12,11 +19,33 @@ type ProductPageProps = {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { handle } = await Promise.resolve(params);
-  const product = await getProductByHandle(getShopifyHandle(handle));
-
-  if (!product) notFound();
-
+  const shopifyHandle = getShopifyHandle(handle);
   const meta = getProduct(handle);
+
+  // Shopify is fetched at request time, so a published→unpublished flip, a
+  // handle change, or a Storefront API error would otherwise dead-end the
+  // buyer on a 404/500. Recover into a page that still lets them purchase
+  // via the Shopify online store.
+  let product = null;
+  try {
+    product = await getProductByHandle(shopifyHandle);
+  } catch {
+    product = null;
+  }
+
+  if (!product) {
+    if (meta) {
+      return (
+        <ProductUnavailable
+          name={meta.name}
+          role={meta.role}
+          buyUrl={shopifyOnlineStoreUrl(shopifyHandle)}
+        />
+      );
+    }
+    notFound();
+  }
+
   const extra = {
     tagline: meta?.tagline ?? "Practice Equipment",
     materials: meta?.materials ?? "—",
@@ -43,66 +72,28 @@ export default async function ProductPage({ params }: ProductPageProps) {
     .slice(0, 3);
 
   return (
-    <div>
+    <div className="pb-24 lg:pb-0">
       {/* ── Main product grid ── */}
       <section className="page-shell section-pad">
         <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] lg:grid-cols-[1.1fr_0.9fr]">
 
           {/* Image column */}
-          <div className="bg-[var(--color-white)]">
-            {images[0] ? (
-              <div className="relative aspect-[3/4] w-full overflow-hidden">
-                <Image
-                  src={images[0].url}
-                  alt={images[0].altText ?? product.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            ) : (
-              <div className="aspect-[3/4] bg-[var(--color-gray-100)]" />
-            )}
-            {images.length > 1 && (
-              <div className="grid grid-cols-3 gap-px bg-[var(--color-gray-100)] border-t border-[var(--color-gray-100)]">
-                {images.slice(1, 4).map((img, i) => (
-                  <div key={i} className="relative aspect-square overflow-hidden">
-                    <Image
-                      src={img.url}
-                      alt={img.altText ?? product.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <ProductGallery images={images} title={product.title} />
 
           {/* Details column */}
           <div className="bg-[var(--color-white)] px-10 py-12 flex flex-col gap-8">
 
             {/* Header */}
-            <div className="border-b border-[var(--color-gray-100)] pb-8">
+            <div>
               <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-3">
                 {extra.tagline}
               </p>
-              <h1 className="font-display text-4xl font-light leading-snug mb-5">
+              <h1 className="font-display text-3xl md:text-4xl font-light leading-snug">
                 {product.title}
               </h1>
-              {product.descriptionHtml ? (
-                <div
-                  className="product-rte text-base leading-relaxed text-[var(--color-gray-500)]"
-                  dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
-                />
-              ) : (
-                <p className="text-base leading-relaxed text-[var(--color-gray-500)]">
-                  {product.description}
-                </p>
-              )}
             </div>
 
-            {/* CTA */}
+            {/* CTA — kept directly under the title so the buy button stays above the fold */}
             {!available ? (
               <div className="space-y-4">
                 <p className="text-sm text-[var(--color-gray-500)]">
@@ -133,6 +124,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               </div>
             )}
+
+            {/* Description */}
+            <div className="border-t border-[var(--color-gray-100)] pt-8">
+              {product.descriptionHtml ? (
+                <div
+                  className="product-rte text-base leading-relaxed text-[var(--color-gray-500)]"
+                  dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+                />
+              ) : (
+                <p className="text-base leading-relaxed text-[var(--color-gray-500)]">
+                  {product.description}
+                </p>
+              )}
+            </div>
 
             {/* Materials + Care */}
             <div className="grid grid-cols-2 gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)]">
