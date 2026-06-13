@@ -80,19 +80,28 @@ export const products: ProductMeta[] = [
   },
   {
     handle: "sticker-sheet",
+    shopifyHandle:
+      "cute-cat-cuddles-sticker-sheet-cozy-kitten-sleep-nap-scene-stickers",
     name: "The Sticker Sheet",
     href: "/product/sticker-sheet",
-    status: "coming-soon",
-    images: [],
+    status: "available",
+    images: ["/images/products/stickersheet.webp"],
+    imagePos: "50% 45%",
     role: "Practice Certifications — Issued by Bubby",
     detail:
-      "Artist being sourced. Display yours when available. Eligibility is assumed if you are reading this.",
-    note: "Display yours accordingly.",
-    tagline: "Coming Soon",
-    materials: "Matte vinyl",
-    care: "Weather resistant",
-    specs: ["Matte finish", "Weather resistant", "Multiple stickers per sheet"],
-    shipping: "Available soon.",
+      "Bubby has expanded into lifestyle goods. Amira was not consulted. Four die-cut stickers documenting his off-hours. Choose your finish. Display accordingly.",
+    note: "Amira was not consulted.",
+    tagline: "Practice Equipment",
+    materials: "Premium water-resistant vinyl, matte UV laminate",
+    care: "Wipe gently from the center outward with a soft, dry cloth.",
+    specs: [
+      "Four die-cut stickers per sheet",
+      "White, holographic, or transparent vinyl",
+      'Two sizes — 6×4" or 11×8.5"',
+      "Water-resistant, rated 5+ years",
+      "Assembled in the USA",
+    ],
+    shipping: "Made for you when you order. Ships in 5–10 business days.",
   },
 ];
 
