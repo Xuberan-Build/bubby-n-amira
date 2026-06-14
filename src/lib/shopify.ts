@@ -144,7 +144,7 @@ export async function getProductByHandle(
             }
           }
         }
-        images(first: 10) {
+        images(first: 30) {
           edges { node { url altText } }
         }
       }
