@@ -46,7 +46,7 @@ const services = [
   },
 ];
 
-const homeProducts = ["bubby-blanket", "grooming-brush", "sticker-sheet"]
+const homeProducts = ["bubby-tee", "sticker-sheet"]
   .map((h) => catalog.find((p) => p.handle === h)!);
 
 export default function Home() {
@@ -207,13 +207,13 @@ export default function Home() {
           <h2 className="font-display text-3xl font-light leading-snug mb-10 md:text-4xl">
             Official practice equipment.<br />Approved by Bubby.
           </h2>
-          <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] md:grid-cols-3">
+          <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] md:grid-cols-2">
             {homeProducts.map((p) => (
               <div key={p.name} className="bg-[var(--color-white)] flex flex-col">
                 <div className="relative h-44 bg-[var(--color-gray-100)]">
-                  {p.images[0] ? (
+                  {(p.cardImage ?? p.images[0]) ? (
                     <Image
-                      src={p.images[0]}
+                      src={p.cardImage ?? p.images[0]}
                       alt={p.name}
                       fill
                       className="object-cover"

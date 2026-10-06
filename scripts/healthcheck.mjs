@@ -21,7 +21,7 @@ const checks = [
     path: "/product/sticker-sheet",
     expectStatus: 200,
     mustContain: [
-      "Dr. Bubby Sticker Sheet", // Shopify product actually resolved
+      "After-Hours Records",     // Shopify product actually resolved
       "Get One",                 // buyable (AddToCart rendered, not waitlist)
       "Product features",        // descriptionHtml rendering, not flattened text
     ],
@@ -35,7 +35,7 @@ const checks = [
     mustContain: ["The Sticker Sheet", "stickersheet.webp"],
   },
   {
-    name: "Homepage",
+    name: "Homepage (redirects to store)",
     path: "/",
     expectStatus: 200,
     mustContain: ["The Sticker Sheet"],

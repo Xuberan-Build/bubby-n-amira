@@ -17,8 +17,6 @@ if [ -z "$SHOPIFY_ADMIN_TOKEN" ]; then
 fi
 
 PRODUCTS=(
-  "scripts/products/wall-brush.json"
-  "scripts/products/bubby-blanket.json"
   "scripts/products/bubby-tee.json"
   "scripts/products/sticker-sheet.json"
 )

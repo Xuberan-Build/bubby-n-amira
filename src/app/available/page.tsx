@@ -50,12 +50,13 @@ export default function AvailablePage() {
             {catalog.map((item) => (
               <div key={item.handle} className="bg-[var(--color-white)] flex flex-col relative group cursor-pointer">
                 <div className="relative h-64 bg-[var(--color-gray-100)]">
-                  {item.images[0] && (
+                  {(item.cardImage ?? item.images[0]) && (
                     <Image
-                      src={item.images[0]}
+                      src={item.cardImage ?? item.images[0]}
                       alt={item.name}
                       fill
                       className="object-cover"
+                      style={{ objectPosition: item.imagePos }}
                       sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   )}
