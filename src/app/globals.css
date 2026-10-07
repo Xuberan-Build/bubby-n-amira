@@ -236,3 +236,23 @@ a {
     transform: none;
   }
 }
+
+/* ── Mobile type scale ──────────────────────────────────────────────
+   Body copy and labels read too small on phones. Bump the small steps
+   only; headings (lg and up) already scale fine.
+   Tailwind v4 reads font sizes from these theme vars, so redefining
+   them resizes every text-xs/sm/base on the site. The tracked-uppercase
+   labels use arbitrary px sizes, which compile to literal values, so
+   they're overridden directly — unlayered CSS beats @layer utilities. */
+@media (max-width: 767px) {
+  :root {
+    --text-xs: 0.875rem;   /* 12 → 14px */
+    --text-sm: 1rem;       /* 14 → 16px (also stops iOS zoom on inputs) */
+    --text-base: 1.0625rem; /* 16 → 17px */
+  }
+
+  .text-\[10px\],
+  .text-\[11px\] {
+    font-size: 12px;
+  }
+}
