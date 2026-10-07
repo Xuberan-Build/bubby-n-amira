@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import AddToCart from "@/components/product/AddToCart";
 import ProductGallery from "@/components/product/ProductGallery";
+import { ProductSelectionProvider } from "@/components/product/ProductSelection";
 import ProductUnavailable from "@/components/product/ProductUnavailable";
 import WaitlistButton from "@/components/waitlist/WaitlistButton";
 import { getProductByHandle, formatPrice } from "@/lib/shopify";
@@ -57,10 +58,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const variants = product.variants.edges.map((e) => e.node);
   const shopifyImages = product.images.edges.map((e) => e.node);
   const localSupplements = getLocalImages(handle).map((src) => ({ url: src, altText: null }));
-  const images =
-    shopifyImages.length > 0
+  const images = meta?.gallery
+    ? meta.gallery.map((g) => ({ url: g.url, altText: g.alt, optionValue: g.optionValue }))
+    : shopifyImages.length > 0
       ? [...shopifyImages, ...localSupplements]
       : localSupplements;
+  // Start on the first value of each option, like the picker always has.
+  const initialOptions = Object.fromEntries(
+    product.options.map((o) => [o.name, o.values[0] ?? ""])
+  );
   const available = variants.some((v) => v.availableForSale);
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
@@ -74,11 +80,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <div className="pb-24 lg:pb-0">
       {/* ── Main product grid ── */}
+      <ProductSelectionProvider initial={initialOptions}>
       <section className="page-shell section-pad">
         <div className="grid gap-px bg-[var(--color-gray-100)] border border-[var(--color-gray-100)] lg:grid-cols-[1.1fr_0.9fr]">
 
           {/* Image column */}
-          <ProductGallery images={images} title={product.title} />
+          <ProductGallery
+            images={images}
+            title={product.title}
+            linkedOption={meta?.linkedOption}
+            square={Boolean(meta?.gallery)}
+          />
 
           {/* Details column */}
           <div className="bg-[var(--color-white)] px-10 py-12 flex flex-col gap-8">
@@ -112,7 +124,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
             ) : (
               <div className="space-y-6">
                 <p className="font-display text-2xl font-light">{price}</p>
-                <AddToCart variants={variants} options={product.options} />
+                <AddToCart
+                  variants={variants}
+                  options={product.options}
+                  swatches={meta?.swatches}
+                />
                 <div className="space-y-2 text-xs text-[var(--color-gray-500)]">
                   <p>{extra.shipping}</p>
                   <p>
@@ -176,6 +192,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </div>
       </section>
+      </ProductSelectionProvider>
 
       {/* ── Bubby's Recommendations ── */}
       {otherProducts.length > 0 && (

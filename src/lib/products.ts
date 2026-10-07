@@ -10,6 +10,13 @@ export type ProductMeta = {
   cardImage?: string;
   // Local images appended to the Shopify gallery on the product page.
   images: string[];
+  // Curated product-page gallery. When set it replaces the Shopify images
+  // (Printify pushes blanks and back views we don't want to show).
+  gallery?: { url: string; alt: string; optionValue?: string }[];
+  // Variant option the gallery follows, e.g. "Color".
+  linkedOption?: string;
+  // Option value -> swatch color for the picker.
+  swatches?: Record<string, string>;
   imagePos?: string;
   role: string;
   detail: string;
@@ -28,10 +35,23 @@ export const products: ProductMeta[] = [
     name: "The Bubby Tee",
     href: "/product/bubby-tee",
     status: "available",
-    // Shopify already carries the full Printify mockup set, so no local
-    // gallery extras — only a card thumbnail cropped from the Blossom mockup.
     cardImage: "/images/products/bubbytee-blossom.webp",
     images: [],
+    gallery: [
+      { url: "/images/products/tee/black-front.webp", alt: "The Bubby Tee in Black — Accepting New Clients", optionValue: "Black" },
+      { url: "/images/products/tee/white-front.webp", alt: "The Bubby Tee in White — Accepting New Clients", optionValue: "White" },
+      { url: "/images/products/tee/ivory-front.webp", alt: "The Bubby Tee in Ivory — Accepting New Clients", optionValue: "Ivory" },
+      { url: "/images/products/tee/white-folded.webp", alt: "The Bubby Tee folded, print detail" },
+      { url: "/images/products/tee/white-model.webp", alt: "The Bubby Tee in White, worn" },
+      { url: "/images/products/tee/blossom-front.webp", alt: "The Bubby Tee in Blossom — Accepting New Clients", optionValue: "Blossom" },
+    ],
+    linkedOption: "Color",
+    swatches: {
+      Black: "#1f1f1f",
+      Blossom: "#f4c9d3",
+      Ivory: "#f3ecd9",
+      White: "#ffffff",
+    },
     imagePos: "50% 40%",
     role: "Practice Apparel — Client-Issued",
     detail:

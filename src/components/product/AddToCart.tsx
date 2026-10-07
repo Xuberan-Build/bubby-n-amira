@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import Button from "@/components/ui/Button";
+import { useProductSelection } from "@/components/product/ProductSelection";
 import type { ShopifyVariant } from "@/lib/shopify";
 
 type Option = { name: string; values: string[] };
@@ -10,6 +11,9 @@ type Option = { name: string; values: string[] };
 type AddToCartProps = {
   variants: ShopifyVariant[];
   options: Option[];
+  // Option value -> CSS color; options whose values all have one render as
+  // swatches instead of a dropdown.
+  swatches?: Record<string, string>;
 };
 
 function findVariant(
@@ -21,15 +25,11 @@ function findVariant(
   );
 }
 
-export default function AddToCart({ variants, options }: AddToCartProps) {
+export default function AddToCart({ variants, options, swatches }: AddToCartProps) {
   const { addToCart, isLoading } = useCart();
   const [added, setAdded] = useState(false);
 
-  // Initialize with first value of each option
-  const [selected, setSelected] = useState<Record<string, string>>(
-    () =>
-      Object.fromEntries(options.map((o) => [o.name, o.values[0] ?? ""])) as Record<string, string>
-  );
+  const { selected, setOption } = useProductSelection();
   const [quantity, setQuantity] = useState(1);
 
   const variant = findVariant(variants, selected);
@@ -52,7 +52,37 @@ export default function AddToCart({ variants, options }: AddToCartProps) {
     <>
     <div className="grid gap-4">
       {options.map((opt) =>
-        opt.values.length > 1 ? (
+        opt.values.length <= 1 ? null : swatches &&
+          opt.values.every((v) => swatches[v]) ? (
+          <div key={opt.name} className="grid gap-2 text-sm text-[var(--color-gray-500)]">
+            <span>
+              {opt.name}
+              <span className="text-[var(--color-charcoal)]"> — {selected[opt.name]}</span>
+            </span>
+            <div role="radiogroup" aria-label={opt.name} className="flex flex-wrap gap-3">
+              {opt.values.map((v) => {
+                const isSelected = selected[opt.name] === v;
+                return (
+                  <button
+                    key={v}
+                    type="button"
+                    role="radio"
+                    aria-checked={isSelected}
+                    aria-label={v}
+                    title={v}
+                    onClick={() => setOption(opt.name, v)}
+                    className={`h-9 w-9 rounded-full border border-[var(--color-gray-100)] ring-offset-2 transition-shadow ${
+                      isSelected
+                        ? "ring-2 ring-[var(--color-charcoal)]"
+                        : "hover:ring-2 hover:ring-[var(--color-gray-100)]"
+                    }`}
+                    style={{ backgroundColor: swatches[v] }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        ) : (
           <label
             key={opt.name}
             className="grid gap-2 text-sm text-[var(--color-gray-500)]"
@@ -61,16 +91,14 @@ export default function AddToCart({ variants, options }: AddToCartProps) {
             <select
               className="rounded-2xl border border-transparent bg-[var(--color-gray-100)] px-4 py-3 text-sm text-[var(--color-charcoal)]"
               value={selected[opt.name]}
-              onChange={(e) =>
-                setSelected((prev) => ({ ...prev, [opt.name]: e.target.value }))
-              }
+              onChange={(e) => setOption(opt.name, e.target.value)}
             >
               {opt.values.map((v) => (
                 <option key={v}>{v}</option>
               ))}
             </select>
           </label>
-        ) : null
+        )
       )}
 
       <label className="grid gap-2 text-sm text-[var(--color-gray-500)]">
