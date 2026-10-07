@@ -103,6 +103,12 @@ export function getShopifyHandle(handle: string): string {
   return getProduct(handle)?.shopifyHandle ?? handle;
 }
 
+// Cart lines carry Shopify handles; map back to the site's /product/ path.
+export function productPathForShopifyHandle(shopifyHandle: string): string {
+  const meta = products.find((p) => (p.shopifyHandle ?? p.handle) === shopifyHandle);
+  return meta?.href ?? `/product/${shopifyHandle}`;
+}
+
 export function getLocalImages(handle: string): string[] {
   return getProduct(handle)?.images ?? [];
 }

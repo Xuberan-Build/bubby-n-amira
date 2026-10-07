@@ -5,6 +5,7 @@ import { klaviyoIdentify } from "@/lib/klaviyo";
 
 export type WaitlistSource =
   | "homepage-auto"
+  | "shop-auto"
   | "homepage-cta"
   | "footer-cta"
   | "waitlist-page"

@@ -4,6 +4,7 @@ import AddToCart from "@/components/product/AddToCart";
 import ProductGallery from "@/components/product/ProductGallery";
 import { ProductSelectionProvider } from "@/components/product/ProductSelection";
 import ProductUnavailable from "@/components/product/ProductUnavailable";
+import TrackViewedProduct from "@/components/product/TrackViewedProduct";
 import WaitlistButton from "@/components/waitlist/WaitlistButton";
 import { getProductByHandle, formatPrice } from "@/lib/shopify";
 import {
@@ -79,6 +80,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <div className="pb-24 lg:pb-0">
+      <TrackViewedProduct
+        productId={product.id}
+        name={product.title}
+        handle={handle}
+        price={parseFloat(product.priceRange.minVariantPrice.amount)}
+        imageUrl={images[0]?.url}
+      />
       {/* ── Main product grid ── */}
       <ProductSelectionProvider initial={initialOptions}>
       <section className="page-shell section-pad">

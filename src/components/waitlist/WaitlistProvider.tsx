@@ -28,6 +28,16 @@ const DISMISSED_KEY = "bubby_waitlist_dismissed_at";
 const SUBMITTED_KEY = "bubby_waitlist_submitted_at";
 const COOLDOWN_MS = 1000 * 60 * 60 * 24 * 14;
 const EXIT_INTENT_THRESHOLD = 24;
+// Phones have no exit intent (no cursor), so they get a dwell timer instead.
+const MOBILE_DWELL_MS = 20_000;
+
+// Pages that auto-offer the waitlist. "/" now redirects to the shop, so the
+// shop and product pages are where visitors actually land.
+function autoSourceFor(pathname: string): WaitlistSource | null {
+  if (pathname === "/") return "homepage-auto";
+  if (pathname === "/available" || pathname.startsWith("/product/")) return "shop-auto";
+  return null;
+}
 
 function isOnCooldown(storageKey: string) {
   if (typeof window === "undefined") return false;
@@ -66,9 +76,15 @@ export function WaitlistProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (pathname !== "/") return;
+    const autoSource = autoSourceFor(pathname);
+    if (!autoSource) return;
     if (isOnCooldown(DISMISSED_KEY) || isOnCooldown(SUBMITTED_KEY)) return;
     if (typeof window === "undefined") return;
+
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      const timer = window.setTimeout(() => openWaitlist(autoSource), MOBILE_DWELL_MS);
+      return () => window.clearTimeout(timer);
+    }
 
     function handleMouseOut(event: MouseEvent) {
       const relatedTarget = event.relatedTarget as Node | null;
@@ -77,7 +93,7 @@ export function WaitlistProvider({ children }: { children: ReactNode }) {
 
       if (!leavingViewport) return;
 
-      openWaitlist("homepage-auto");
+      openWaitlist(autoSource!);
       window.removeEventListener("mouseout", handleMouseOut);
     }
 

@@ -17,6 +17,7 @@ import {
   type ShopifyCart,
 } from "@/lib/shopify";
 import { klaviyoTrack } from "@/lib/klaviyo";
+import { productPathForShopifyHandle } from "@/lib/products";
 
 type CartContextType = {
   cart: ShopifyCart | null;
@@ -70,7 +71,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           AddedItemVariantName: addedLine.merchandise.title,
           AddedItemPrice: parseFloat(addedLine.merchandise.price.amount),
           AddedItemQuantity: quantity,
-          AddedItemURL: `${window.location.origin}/products/${addedLine.merchandise.product.handle}`,
+          AddedItemURL: `${window.location.origin}${productPathForShopifyHandle(addedLine.merchandise.product.handle)}`,
           AddedItemImageURL: addedLine.merchandise.image?.url ?? "",
           CheckoutURL: updated.checkoutUrl,
           Items: updated.lines.edges.map((e) => ({
@@ -78,7 +79,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             Quantity: e.node.quantity,
             ItemPrice: parseFloat(e.node.merchandise.price.amount),
             RowTotal: parseFloat(e.node.merchandise.price.amount) * e.node.quantity,
-            ProductURL: `${window.location.origin}/products/${e.node.merchandise.product.handle}`,
+            ProductURL: `${window.location.origin}${productPathForShopifyHandle(e.node.merchandise.product.handle)}`,
             ImageURL: e.node.merchandise.image?.url ?? "",
           })),
         });

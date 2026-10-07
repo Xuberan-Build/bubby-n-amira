@@ -23,3 +23,8 @@ export function klaviyoIdentify(props: KlaviyoIdentifyProps) {
 export function klaviyoTrack(event: string, props: Record<string, unknown>) {
   push(["track", event, props]);
 }
+
+// Feeds the "Recently Viewed Items" block in Klaviyo emails.
+export function klaviyoTrackViewedItem(item: Record<string, unknown>) {
+  push(["trackViewedItem", item]);
+}
