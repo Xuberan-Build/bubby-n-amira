@@ -9,7 +9,7 @@ export default function CartIcon() {
   return (
     <Link
       href="/cart"
-      className="relative flex h-10 w-10 items-center justify-center rounded-full border border-transparent text-[var(--color-charcoal)] transition"
+      className="relative flex h-11 w-11 md:h-10 md:w-10 items-center justify-center rounded-full border border-transparent text-[var(--color-charcoal)] transition"
       aria-label="Cart"
     >
       <svg
